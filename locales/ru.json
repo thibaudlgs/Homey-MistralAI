@@ -1,0 +1,38 @@
+{
+  "app": {
+    "settings": {
+      "api_key": {
+        "title": "Ключ API",
+        "label": "Введите ваш ключ API Mistral AI",
+        "description": "Получите свой на https://console.mistral.ai/"
+      },
+      "save": "Сохранить",
+      "saved": "Настройки сохранены!"
+    }
+  },
+  "flow": {
+    "actions": {
+      "ask_mistral": {
+        "title": "Спросить Mistral",
+        "args": {
+          "prompt": "Запрос",
+          "model": "Модель",
+          "system_prompt": "Системный запрос",
+          "max_tokens": "Max Tokens"
+        },
+        "tokens": {
+          "response": "Ответ"
+        }
+      }
+    },
+    "triggers": {
+      "mistral_responded": {
+        "title": "Mistral AI ответил",
+        "tokens": {
+          "response": "Ответ",
+          "prompt": "Запрос"
+        }
+      }
+    }
+  }
+}

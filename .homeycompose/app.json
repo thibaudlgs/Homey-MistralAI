@@ -1,0 +1,50 @@
+{
+  "id": "com.mistral.ai",
+  "version": "0.0.2",
+  "sdk": 3,
+  "runtime": "nodejs",
+  "compatibility": ">=5.0.0",
+  "author": {
+    "name": "Thibaud Liegeois",
+    "email": "[EMAIL_ADDRESS]"
+  },
+  "name": {
+    "en": "Mistral AI",
+    "nl": "Mistral AI",
+    "de": "Mistral AI",
+    "fr": "Mistral AI",
+    "it": "Mistral AI",
+    "sv": "Mistral AI",
+    "no": "Mistral AI",
+    "es": "Mistral AI",
+    "da": "Mistral AI",
+    "ru": "Mistral AI",
+    "pl": "Mistral AI",
+    "ko": "Mistral AI",
+    "ar": "Mistral AI"
+  },
+  "description": {
+    "en": "Harness the power of Mistral AI LLMs directly in your Homey flows.",
+    "nl": "Benut de kracht van Mistral AI LLMs direct in je Homey flows.",
+    "de": "Nutzen Sie die Kraft der Mistral AI LLMs direkt in Ihren Homey flows.",
+    "fr": "Exploitez la puissance des LLM de Mistral AI directement dans vos flows Homey.",
+    "it": "Sfrutta la potenza degli LLM di Mistral AI direttamente nei tuoi flow Homey.",
+    "sv": "Utnyttja kraften av Mistral AI LLMs direkt i dina Homey flows.",
+    "no": "Utnytt kraften fra Mistral AI LLMs direkte i dine Homey flows.",
+    "es": "Aproveche el poder de los LLMs de Mistral AI directamente en sus flows de Homey.",
+    "da": "Udnyt kraften i Mistral AI LLM'er direkte i dine Homey flows.",
+    "ru": "Используйте мощь Mistral AI LLM прямо в ваших Homey flows.",
+    "pl": "Wykorzystaj moc modeli językowych Mistral AI bezpośrednio w swoich Homey flows.",
+    "ko": "Homey flows에서 Mistral AI LLM의 강력한 기능을 직접 활용하세요.",
+    "ar": "استفد من قوة نماذج Mistral AI اللغوية الكبيرة مباشرة في Homey flows الخاصة بك."
+  },
+  "category": [
+    "internet"
+  ],
+  "permissions": [],
+  "images": {
+    "large": "assets/images/large.jpg",
+    "small": "assets/images/small.jpg"
+  },
+  "brandColor": "#FD6520"
+}

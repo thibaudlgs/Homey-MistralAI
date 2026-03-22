@@ -1,0 +1,118 @@
+{
+  "title": {
+    "en": "Ask Mistral Agent",
+    "nl": "Vraag Mistral Agent",
+    "de": "Mistral Agent fragen",
+    "fr": "Demander à l'agent Mistral",
+    "it": "Chiedi all'agente Mistral",
+    "sv": "Fråga Mistral Agent",
+    "no": "Spør Mistral Agent",
+    "es": "Preguntar al Agente Mistral",
+    "da": "Spørg Mistral Agent",
+    "ru": "Спросить Mistral Agent",
+    "pl": "Zapytaj Mistral Agent",
+    "ko": "Mistral Agent에게 질문하기",
+    "ar": "اسأل وكيل Mistral"
+  },
+  "titleFormatted": {
+    "en": "Ask Mistral Agent: [[prompt]] using Agent [[agent_id]] (Max: [[max_tokens]])",
+    "nl": "Vraag Mistral Agent: [[prompt]] met Agent [[agent_id]] (Max: [[max_tokens]])",
+    "de": "Mistral Agent fragen: [[prompt]] mit Agent [[agent_id]] (Max: [[max_tokens]])",
+    "fr": "Demander à l'agent Mistral: [[prompt]] avec Agent [[agent_id]] (Max: [[max_tokens]])",
+    "it": "Chiedi all'agente Mistral: [[prompt]] con Agente [[agent_id]] (Max: [[max_tokens]])",
+    "sv": "Fråga Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
+    "no": "Spør Mistral Agent: [[prompt]] med Agent [[agent_id]] (Maks: [[max_tokens]])",
+    "es": "Preguntar al Agente Mistral: [[prompt]] usando Agente [[agent_id]] (Max: [[max_tokens]])",
+    "da": "Spørg Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
+    "ru": "Спросить Mistral Agent: [[prompt]] используя Агент [[agent_id]] (Макс: [[max_tokens]])",
+    "pl": "Zapytaj Mistral Agent: [[prompt]] używając Agenta [[agent_id]] (Maks: [[max_tokens]])",
+    "ko": "Mistral Agent에게 질문 (Agent [[agent_id]] 사용): [[prompt]] (최대: [[max_tokens]])",
+    "ar": "اسأل وكيل Mistral: [[prompt]] باستخدام الوكيل [[agent_id]] (الحد الأقصى: [[max_tokens]])"
+  },
+  "hint": {
+    "en": "Send a prompt to a custom Mistral AI Agent.",
+    "nl": "Stuur een prompt naar een aangepaste Mistral AI Agent.",
+    "de": "Senden Sie einen Prompt an einen benutzerdefinierten Mistral AI Agent.",
+    "fr": "Envoyez une invite à un agent Mistral AI personnalisé.",
+    "it": "Invia un prompt a un agente Mistral AI personalizzato.",
+    "sv": "Skicka en prompt till en anpassad Mistral AI Agent.",
+    "no": "Send en prompt til en tilpasset Mistral AI Agent.",
+    "es": "Envíe un prompt a un Agente Mistral AI personalizado.",
+    "da": "Send en prompt til en tilpasset Mistral AI Agent.",
+    "ru": "Отправьте запрос пользовательскому Mistral AI Agent.",
+    "pl": "Wyślij zapytanie do niestandardowego Mistral AI Agent.",
+    "ko": "사용자 지정 Mistral AI Agent에 프롬프트를 보냅니다.",
+    "ar": "أرسل مطالبة إلى وكيل Mistral AI مخصص."
+  },
+  "args": [
+    {
+      "name": "prompt",
+      "type": "text",
+      "placeholder": {
+        "en": "Ask something...",
+        "nl": "Vraag iets...",
+        "de": "Etwas fragen...",
+        "fr": "Demander quelque chose...",
+        "it": "Chiedi qualcosa...",
+        "sv": "Fråga något...",
+        "no": "Spør om noe...",
+        "es": "Pregunte algo...",
+        "da": "Spørg om noget...",
+        "ru": "Спросите что-нибудь...",
+        "pl": "Zapytaj o coś...",
+        "ko": "무엇이든 물어보세요...",
+        "ar": "اسأل شيئا..."
+      }
+    },
+    {
+      "name": "agent_id",
+      "type": "text",
+      "placeholder": {
+        "en": "ag_...",
+        "nl": "ag_...",
+        "de": "ag_...",
+        "fr": "ag_...",
+        "it": "ag_...",
+        "sv": "ag_...",
+        "no": "ag_...",
+        "es": "ag_...",
+        "da": "ag_...",
+        "ru": "ag_...",
+        "pl": "ag_...",
+        "ko": "ag_...",
+        "ar": "ag_..."
+      }
+    },
+    {
+      "name": "max_tokens",
+      "type": "number",
+      "placeholder": {
+        "en": "800"
+      },
+      "min": 1,
+      "max": 8192
+    }
+  ],
+  "tokens": [
+    {
+      "name": "response",
+      "type": "string",
+      "title": {
+        "en": "Response",
+        "nl": "Reactie",
+        "de": "Antwort",
+        "fr": "Réponse",
+        "it": "Risposta",
+        "sv": "Svar",
+        "no": "Svar",
+        "es": "Respuesta",
+        "da": "Svar",
+        "ru": "Ответ",
+        "pl": "Odpowiedź",
+        "ko": "응답",
+        "ar": "الرد"
+      },
+      "example": "Paris is the capital of France."
+    }
+  ]
+}

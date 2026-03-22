@@ -1,0 +1,38 @@
+{
+  "app": {
+    "settings": {
+      "api_key": {
+        "title": "مفتاح API",
+        "label": "أدخل مفتاح Mistral AI API الخاص بك",
+        "description": "احصل على مفتاحك من https://console.mistral.ai/"
+      },
+      "save": "حفظ",
+      "saved": "تم حفظ الإعدادات!"
+    }
+  },
+  "flow": {
+    "actions": {
+      "ask_mistral": {
+        "title": "اسأل Mistral",
+        "args": {
+          "prompt": "مطالبة",
+          "model": "نموذج",
+          "system_prompt": "مطالبة النظام",
+          "max_tokens": "أقصى الرموز"
+        },
+        "tokens": {
+          "response": "الرد"
+        }
+      }
+    },
+    "triggers": {
+      "mistral_responded": {
+        "title": "رد Mistral AI",
+        "tokens": {
+          "response": "الرد",
+          "prompt": "مطالبة"
+        }
+      }
+    }
+  }
+}

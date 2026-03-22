@@ -1,0 +1,594 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.mistral.ai",
+  "version": "0.0.2",
+  "sdk": 3,
+  "runtime": "nodejs",
+  "compatibility": ">=5.0.0",
+  "author": {
+    "name": "Thibaud Liegeois",
+    "email": "[EMAIL_ADDRESS]"
+  },
+  "name": {
+    "en": "Mistral AI",
+    "nl": "Mistral AI",
+    "de": "Mistral AI",
+    "fr": "Mistral AI",
+    "it": "Mistral AI",
+    "sv": "Mistral AI",
+    "no": "Mistral AI",
+    "es": "Mistral AI",
+    "da": "Mistral AI",
+    "ru": "Mistral AI",
+    "pl": "Mistral AI",
+    "ko": "Mistral AI",
+    "ar": "Mistral AI"
+  },
+  "description": {
+    "en": "Harness the power of Mistral AI LLMs directly in your Homey flows.",
+    "nl": "Benut de kracht van Mistral AI LLMs direct in je Homey flows.",
+    "de": "Nutzen Sie die Kraft der Mistral AI LLMs direkt in Ihren Homey flows.",
+    "fr": "Exploitez la puissance des LLM de Mistral AI directement dans vos flows Homey.",
+    "it": "Sfrutta la potenza degli LLM di Mistral AI direttamente nei tuoi flow Homey.",
+    "sv": "Utnyttja kraften av Mistral AI LLMs direkt i dina Homey flows.",
+    "no": "Utnytt kraften fra Mistral AI LLMs direkte i dine Homey flows.",
+    "es": "Aproveche el poder de los LLMs de Mistral AI directamente en sus flows de Homey.",
+    "da": "Udnyt kraften i Mistral AI LLM'er direkte i dine Homey flows.",
+    "ru": "Используйте мощь Mistral AI LLM прямо в ваших Homey flows.",
+    "pl": "Wykorzystaj moc modeli językowych Mistral AI bezpośrednio w swoich Homey flows.",
+    "ko": "Homey flows에서 Mistral AI LLM의 강력한 기능을 직접 활용하세요.",
+    "ar": "استفد من قوة نماذج Mistral AI اللغوية الكبيرة مباشرة في Homey flows الخاصة بك."
+  },
+  "category": [
+    "internet"
+  ],
+  "permissions": [],
+  "images": {
+    "large": "assets/images/large.jpg",
+    "small": "assets/images/small.jpg"
+  },
+  "brandColor": "#FD6520",
+  "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "Mistral Agent responded",
+          "nl": "Mistral Agent heeft geantwoord",
+          "de": "Mistral Agent hat geantwortet",
+          "fr": "L'agent Mistral a répondu",
+          "it": "L'agente Mistral ha risposto",
+          "sv": "Mistral Agent svarade",
+          "no": "Mistral Agent har svart",
+          "es": "Mistral Agent ha respondido",
+          "da": "Mistral Agent svarede",
+          "ru": "Mistral Agent ответил",
+          "pl": "Mistral Agent odpowiedział",
+          "ko": "Mistral Agent 응답함",
+          "ar": "رد وكيل Mistral"
+        },
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            },
+            "example": "Of course! Here's what I found..."
+          },
+          {
+            "name": "prompt",
+            "type": "string",
+            "title": {
+              "en": "Prompt",
+              "nl": "Prompt",
+              "de": "Prompt",
+              "fr": "Invite",
+              "it": "Prompt",
+              "sv": "Prompt",
+              "no": "Prompt",
+              "es": "Prompt",
+              "da": "Prompt",
+              "ru": "Запрос",
+              "pl": "Prompt",
+              "ko": "프롬프트",
+              "ar": "مطالبة"
+            },
+            "example": "What's the weather like?"
+          }
+        ],
+        "id": "mistral_agent_responded"
+      },
+      {
+        "title": {
+          "en": "Mistral AI responded",
+          "nl": "Mistral AI heeft geantwoord",
+          "de": "Mistral AI hat geantwortet",
+          "fr": "Mistral AI a répondu",
+          "it": "Mistral AI ha risposto",
+          "sv": "Mistral AI svarade",
+          "no": "Mistral AI har svart",
+          "es": "Mistral AI ha respondido",
+          "da": "Mistral AI svarede",
+          "ru": "Mistral AI ответил",
+          "pl": "Mistral AI odpowiedział",
+          "ko": "Mistral AI 응답함",
+          "ar": "رد Mistral AI"
+        },
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            },
+            "example": "Of course! Here's what I found..."
+          },
+          {
+            "name": "prompt",
+            "type": "string",
+            "title": {
+              "en": "Prompt",
+              "nl": "Prompt",
+              "de": "Prompt",
+              "fr": "Invite",
+              "it": "Prompt",
+              "sv": "Prompt",
+              "no": "Prompt",
+              "es": "Prompt",
+              "da": "Prompt",
+              "ru": "Запрос",
+              "pl": "Prompt",
+              "ko": "프롬프트",
+              "ar": "مطالبة"
+            },
+            "example": "What's the weather like?"
+          }
+        ],
+        "id": "mistral_responded"
+      },
+      {
+        "title": {
+          "en": "Mistral AI Vision responded",
+          "nl": "Mistral AI Vision heeft geantwoord",
+          "de": "Mistral AI Vision hat geantwortet",
+          "fr": "Mistral AI Vision a répondu",
+          "it": "Mistral AI Vision ha risposto",
+          "sv": "Mistral AI Vision svarade",
+          "no": "Mistral AI Vision har svart",
+          "es": "Mistral AI Vision ha respondido",
+          "da": "Mistral AI Vision svarede",
+          "ru": "Mistral AI Vision ответил",
+          "pl": "Mistral AI Vision odpowiedział",
+          "ko": "Mistral AI Vision 응답함",
+          "ar": "رد Mistral AI للرؤية"
+        },
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            },
+            "example": "This is an image of a cat."
+          },
+          {
+            "name": "prompt",
+            "type": "string",
+            "title": {
+              "en": "Prompt",
+              "nl": "Prompt",
+              "de": "Prompt",
+              "fr": "Invite",
+              "it": "Prompt",
+              "sv": "Prompt",
+              "no": "Prompt",
+              "es": "Prompt",
+              "da": "Prompt",
+              "ru": "Запрос",
+              "pl": "Prompt",
+              "ko": "프롬프트",
+              "ar": "مطالبة"
+            },
+            "example": "What is in this image?"
+          }
+        ],
+        "id": "mistral_vision_responded"
+      }
+    ],
+    "actions": [
+      {
+        "title": {
+          "en": "Ask Mistral",
+          "nl": "Vraag Mistral",
+          "de": "Mistral fragen",
+          "fr": "Demander à Mistral",
+          "it": "Chiedi a Mistral",
+          "sv": "Fråga Mistral",
+          "no": "Spør Mistral",
+          "es": "Preguntar a Mistral",
+          "da": "Spørg Mistral",
+          "ru": "Спросить Mistral",
+          "pl": "Zapytaj Mistral",
+          "ko": "Mistral에게 질문하기",
+          "ar": "اسأل Mistral"
+        },
+        "titleFormatted": {
+          "en": "Ask Mistral: [[prompt]] using [[model]] (Max: [[max_tokens]])",
+          "nl": "Vraag Mistral: [[prompt]] met [[model]] (Max: [[max_tokens]])",
+          "de": "Mistral fragen: [[prompt]] mit [[model]] (Max: [[max_tokens]])",
+          "fr": "Demander à Mistral: [[prompt]] avec [[model]] (Max: [[max_tokens]])",
+          "it": "Chiedi a Mistral: [[prompt]] con [[model]] (Max: [[max_tokens]])",
+          "sv": "Fråga Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]])",
+          "no": "Spør Mistral: [[prompt]] med [[model]] (Maks: [[max_tokens]])",
+          "es": "Preguntar a Mistral: [[prompt]] usando [[model]] (Max: [[max_tokens]])",
+          "da": "Spørg Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]])",
+          "ru": "Спросить Mistral: [[prompt]] используя [[model]] (Макс: [[max_tokens]])",
+          "pl": "Zapytaj Mistral: [[prompt]] używając [[model]] (Maks: [[max_tokens]])",
+          "ko": "Mistral에게 질문 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]])",
+          "ar": "اسأل Mistral: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]])"
+        },
+        "hint": {
+          "en": "Send a prompt to Mistral AI and wait for the response. You can configure the system prompt behavior from the Mistral AI app settings.",
+          "nl": "Stuur een prompt naar Mistral AI en wacht op antwoord. Het gedrag van de system prompt kan geconfigureerd worden in de app instellingen.",
+          "de": "Senden Sie einen Prompt an Mistral AI und warten Sie auf die Antwort. Sie können das Verhalten des System-Prompts in den App-Einstellungen konfigurieren.",
+          "fr": "Envoyez une invite à Mistral AI et attendez la réponse. Vous pouvez configurer le comportement de l'invite système depuis les paramètres de l'application.",
+          "it": "Invia un prompt a Mistral AI e attendi la risposta. Puoi configurare il comportamento del prompt di sistema dalle impostazioni dell'app.",
+          "sv": "Skicka en prompt till Mistral AI och vänta på svar. Du kan konfigurera systempromptens beteende i appens inställningar.",
+          "no": "Send en prompt til Mistral AI og vent på svar. Du kan konfigurere systempromptens oppførsel i app-innstillingene.",
+          "es": "Envíe un prompt a Mistral AI y espere la respuesta. Puede configurar el comportamiento del prompt del sistema en la configuración de la aplicación.",
+          "da": "Send en prompt til Mistral AI og vent på svar. Du kan konfigurere systemets promptadfærd i app-indstillingerne.",
+          "ru": "Отправьте запрос в Mistral AI и дождитесь ответа. Вы можете настроить поведение системного запроса в настройках приложения.",
+          "pl": "Wyślij zapytanie do Mistral AI i poczekaj na odpowiedź. W ustawieniach aplikacji możesz skonfigurować zachowanie promptu systemowego.",
+          "ko": "Mistral AI에 프롬프트를 보내고 응답을 기다립니다. 앱 설정에서 시스템 프롬프트 동작을 구성할 수 있습니다.",
+          "ar": "أرسل مطالبة إلى Mistral AI وانتظر الرد. يمكنك تكوين سلوك مطالبة النظام من إعدادات تطبيق Mistral AI."
+        },
+        "args": [
+          {
+            "name": "prompt",
+            "type": "text",
+            "placeholder": {
+              "en": "Ask something...",
+              "nl": "Vraag iets...",
+              "de": "Etwas fragen...",
+              "fr": "Demander quelque chose...",
+              "it": "Chiedi qualcosa...",
+              "sv": "Fråga något...",
+              "no": "Spør om noe...",
+              "es": "Pregunte algo...",
+              "da": "Spørg om noget...",
+              "ru": "Спросите что-нибудь...",
+              "pl": "Zapytaj o coś...",
+              "ko": "무엇이든 물어보세요...",
+              "ar": "اسأل شيئا..."
+            }
+          },
+          {
+            "name": "model",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Type or select a model...",
+              "nl": "Typ of selecteer een model...",
+              "de": "Tippen oder Modell auswählen...",
+              "fr": "Saisir ou sélectionner un modèle...",
+              "it": "Digita o seleziona un modello...",
+              "sv": "Skriv eller välj en modell...",
+              "no": "Skriv eller velg en modell...",
+              "es": "Escriba o seleccione un modelo...",
+              "da": "Skriv eller vælg en model...",
+              "ru": "Введите или выберите модель...",
+              "pl": "Wpisz lub wybierz model...",
+              "ko": "모델을 입력하거나 선택하세요...",
+              "ar": "اكتب أو حدد نموذجًا..."
+            }
+          },
+          {
+            "name": "max_tokens",
+            "type": "number",
+            "placeholder": {
+              "en": "200"
+            },
+            "min": 1,
+            "max": 4096
+          }
+        ],
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            },
+            "example": "Paris is the capital of France."
+          }
+        ],
+        "id": "ask_mistral"
+      },
+      {
+        "title": {
+          "en": "Ask Mistral Agent",
+          "nl": "Vraag Mistral Agent",
+          "de": "Mistral Agent fragen",
+          "fr": "Demander à l'agent Mistral",
+          "it": "Chiedi all'agente Mistral",
+          "sv": "Fråga Mistral Agent",
+          "no": "Spør Mistral Agent",
+          "es": "Preguntar al Agente Mistral",
+          "da": "Spørg Mistral Agent",
+          "ru": "Спросить Mistral Agent",
+          "pl": "Zapytaj Mistral Agent",
+          "ko": "Mistral Agent에게 질문하기",
+          "ar": "اسأل وكيل Mistral"
+        },
+        "titleFormatted": {
+          "en": "Ask Mistral Agent: [[prompt]] using Agent [[agent_id]] (Max: [[max_tokens]])",
+          "nl": "Vraag Mistral Agent: [[prompt]] met Agent [[agent_id]] (Max: [[max_tokens]])",
+          "de": "Mistral Agent fragen: [[prompt]] mit Agent [[agent_id]] (Max: [[max_tokens]])",
+          "fr": "Demander à l'agent Mistral: [[prompt]] avec Agent [[agent_id]] (Max: [[max_tokens]])",
+          "it": "Chiedi all'agente Mistral: [[prompt]] con Agente [[agent_id]] (Max: [[max_tokens]])",
+          "sv": "Fråga Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
+          "no": "Spør Mistral Agent: [[prompt]] med Agent [[agent_id]] (Maks: [[max_tokens]])",
+          "es": "Preguntar al Agente Mistral: [[prompt]] usando Agente [[agent_id]] (Max: [[max_tokens]])",
+          "da": "Spørg Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
+          "ru": "Спросить Mistral Agent: [[prompt]] используя Агент [[agent_id]] (Макс: [[max_tokens]])",
+          "pl": "Zapytaj Mistral Agent: [[prompt]] używając Agenta [[agent_id]] (Maks: [[max_tokens]])",
+          "ko": "Mistral Agent에게 질문 (Agent [[agent_id]] 사용): [[prompt]] (최대: [[max_tokens]])",
+          "ar": "اسأل وكيل Mistral: [[prompt]] باستخدام الوكيل [[agent_id]] (الحد الأقصى: [[max_tokens]])"
+        },
+        "hint": {
+          "en": "Send a prompt to a custom Mistral AI Agent.",
+          "nl": "Stuur een prompt naar een aangepaste Mistral AI Agent.",
+          "de": "Senden Sie einen Prompt an einen benutzerdefinierten Mistral AI Agent.",
+          "fr": "Envoyez une invite à un agent Mistral AI personnalisé.",
+          "it": "Invia un prompt a un agente Mistral AI personalizzato.",
+          "sv": "Skicka en prompt till en anpassad Mistral AI Agent.",
+          "no": "Send en prompt til en tilpasset Mistral AI Agent.",
+          "es": "Envíe un prompt a un Agente Mistral AI personalizado.",
+          "da": "Send en prompt til en tilpasset Mistral AI Agent.",
+          "ru": "Отправьте запрос пользовательскому Mistral AI Agent.",
+          "pl": "Wyślij zapytanie do niestandardowego Mistral AI Agent.",
+          "ko": "사용자 지정 Mistral AI Agent에 프롬프트를 보냅니다.",
+          "ar": "أرسل مطالبة إلى وكيل Mistral AI مخصص."
+        },
+        "args": [
+          {
+            "name": "prompt",
+            "type": "text",
+            "placeholder": {
+              "en": "Ask something...",
+              "nl": "Vraag iets...",
+              "de": "Etwas fragen...",
+              "fr": "Demander quelque chose...",
+              "it": "Chiedi qualcosa...",
+              "sv": "Fråga något...",
+              "no": "Spør om noe...",
+              "es": "Pregunte algo...",
+              "da": "Spørg om noget...",
+              "ru": "Спросите что-нибудь...",
+              "pl": "Zapytaj o coś...",
+              "ko": "무엇이든 물어보세요...",
+              "ar": "اسأل شيئا..."
+            }
+          },
+          {
+            "name": "agent_id",
+            "type": "text",
+            "placeholder": {
+              "en": "ag_...",
+              "nl": "ag_...",
+              "de": "ag_...",
+              "fr": "ag_...",
+              "it": "ag_...",
+              "sv": "ag_...",
+              "no": "ag_...",
+              "es": "ag_...",
+              "da": "ag_...",
+              "ru": "ag_...",
+              "pl": "ag_...",
+              "ko": "ag_...",
+              "ar": "ag_..."
+            }
+          },
+          {
+            "name": "max_tokens",
+            "type": "number",
+            "placeholder": {
+              "en": "800"
+            },
+            "min": 1,
+            "max": 8192
+          }
+        ],
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            },
+            "example": "Paris is the capital of France."
+          }
+        ],
+        "id": "ask_mistral_agent"
+      },
+      {
+        "title": {
+          "en": "Ask Mistral (Vision)",
+          "nl": "Vraag Mistral (Vision)",
+          "de": "Mistral fragen (Vision)",
+          "fr": "Demander à Mistral (Vision)",
+          "it": "Chiedi a Mistral (Vision)",
+          "sv": "Fråga Mistral (Vision)",
+          "no": "Spør Mistral (Vision)",
+          "es": "Preguntar a Mistral (Vision)",
+          "da": "Spørg Mistral (Vision)",
+          "ru": "Спросить Mistral (Vision)",
+          "pl": "Zapytaj Mistral (Vision)",
+          "ko": "Mistral에게 질문하기 (비전)",
+          "ar": "اسأل Mistral (الرؤية)"
+        },
+        "titleFormatted": {
+          "en": "Ask Mistral: [[prompt]] about image [[droptoken]] using [[model]] (Max: [[max_tokens]])",
+          "nl": "Vraag Mistral: [[prompt]] over afbeelding [[droptoken]] met [[model]] (Max: [[max_tokens]])",
+          "de": "Mistral fragen: [[prompt]] über Bild [[droptoken]] mit [[model]] (Max: [[max_tokens]])",
+          "fr": "Demander à Mistral: [[prompt]] sur l'image [[droptoken]] avec [[model]] (Max: [[max_tokens]])",
+          "it": "Chiedi a Mistral: [[prompt]] sull'immagine [[droptoken]] con [[model]] (Max: [[max_tokens]])",
+          "sv": "Fråga Mistral: [[prompt]] om bild [[droptoken]] med [[model]] (Max: [[max_tokens]])",
+          "no": "Spør Mistral: [[prompt]] om bilde [[droptoken]] med [[model]] (Maks: [[max_tokens]])",
+          "es": "Preguntar a Mistral: [[prompt]] sobre imagen [[droptoken]] usando [[model]] (Max: [[max_tokens]])",
+          "da": "Spørg Mistral: [[prompt]] om billede [[droptoken]] med [[model]] (Max: [[max_tokens]])",
+          "ru": "Спросить Mistral: [[prompt]] об изображении [[droptoken]] используя [[model]] (Макс: [[max_tokens]])",
+          "pl": "Zapytaj Mistral: [[prompt]] o zdjęcie [[droptoken]] używając [[model]] (Maks: [[max_tokens]])",
+          "ko": "Mistral에게 이미지 [[droptoken]]에 대해 질문 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]])",
+          "ar": "اسأل Mistral: [[prompt]] حول الصورة [[droptoken]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]])"
+        },
+        "hint": {
+          "en": "Send a prompt with an image to Mistral AI Vision model.",
+          "nl": "Stuur een prompt met een afbeelding naar het Mistral AI Vision model.",
+          "de": "Senden Sie einen Prompt mit einem Bild an das Mistral AI Vision Modell.",
+          "fr": "Envoyez une invite avec une image au modèle Mistral AI Vision.",
+          "it": "Invia un prompt con un'immagine al modello Mistral AI Vision.",
+          "sv": "Skicka en prompt med en bild till Mistral AI Vision-modellen.",
+          "no": "Send en prompt med et bilde til Mistral AI Vision-modellen.",
+          "es": "Envíe un prompt con una imagen al modelo Mistral AI Vision.",
+          "da": "Send en prompt med et billede til Mistral AI Vision-modellen.",
+          "ru": "Отправьте запрос с изображением в модель Mistral AI Vision.",
+          "pl": "Wyślij zapytanie ze zdjęciem do modelu Mistral AI Vision.",
+          "ko": "이미지와 함께 프롬프트를 Mistral AI Vision 모델에 보냅니다.",
+          "ar": "أرسل مطالبة مع صورة إلى نموذج Mistral AI للرؤية."
+        },
+        "droptoken": "image",
+        "args": [
+          {
+            "name": "prompt",
+            "type": "text",
+            "placeholder": {
+              "en": "Describe this image...",
+              "nl": "Beschrijf deze afbeelding...",
+              "de": "Beschreiben Sie dieses Bild...",
+              "fr": "Décrivez cette image...",
+              "it": "Descrivi questa immagine...",
+              "sv": "Beskriv denna bild...",
+              "no": "Beskriv dette bildet...",
+              "es": "Describa esta imagen...",
+              "da": "Beskriv dette billede...",
+              "ru": "Опишите это изображение...",
+              "pl": "Opisz to zdjęcie...",
+              "ko": "이 이미지 설명하기...",
+              "ar": "صف هذه الصورة..."
+            }
+          },
+          {
+            "name": "model",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Type or select a model...",
+              "nl": "Typ of selecteer een model...",
+              "de": "Tippen oder Modell auswählen...",
+              "fr": "Saisir ou sélectionner un modèle...",
+              "it": "Digita o seleziona un modello...",
+              "sv": "Skriv eller välj en modell...",
+              "no": "Skriv eller velg en modell...",
+              "es": "Escriba o seleccione un modelo...",
+              "da": "Skriv eller vælg en model...",
+              "ru": "Введите или выберите модель...",
+              "pl": "Wpisz lub wybierz model...",
+              "ko": "모델을 입력하거나 선택하세요...",
+              "ar": "اكتب أو حدد نموذجًا..."
+            }
+          },
+          {
+            "name": "max_tokens",
+            "type": "number",
+            "placeholder": {
+              "en": "200"
+            },
+            "min": 1,
+            "max": 4096
+          }
+        ],
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            }
+          }
+        ],
+        "id": "ask_mistral_vision"
+      }
+    ]
+  }
+}

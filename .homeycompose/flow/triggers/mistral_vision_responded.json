@@ -1,0 +1,59 @@
+{
+  "title": {
+    "en": "Mistral AI Vision responded",
+    "nl": "Mistral AI Vision heeft geantwoord",
+    "de": "Mistral AI Vision hat geantwortet",
+    "fr": "Mistral AI Vision a répondu",
+    "it": "Mistral AI Vision ha risposto",
+    "sv": "Mistral AI Vision svarade",
+    "no": "Mistral AI Vision har svart",
+    "es": "Mistral AI Vision ha respondido",
+    "da": "Mistral AI Vision svarede",
+    "ru": "Mistral AI Vision ответил",
+    "pl": "Mistral AI Vision odpowiedział",
+    "ko": "Mistral AI Vision 응답함",
+    "ar": "رد Mistral AI للرؤية"
+  },
+  "tokens": [
+    {
+      "name": "response",
+      "type": "string",
+      "title": {
+        "en": "Response",
+        "nl": "Reactie",
+        "de": "Antwort",
+        "fr": "Réponse",
+        "it": "Risposta",
+        "sv": "Svar",
+        "no": "Svar",
+        "es": "Respuesta",
+        "da": "Svar",
+        "ru": "Ответ",
+        "pl": "Odpowiedź",
+        "ko": "응답",
+        "ar": "الرد"
+      },
+      "example": "This is an image of a cat."
+    },
+    {
+      "name": "prompt",
+      "type": "string",
+      "title": {
+        "en": "Prompt",
+        "nl": "Prompt",
+        "de": "Prompt",
+        "fr": "Invite",
+        "it": "Prompt",
+        "sv": "Prompt",
+        "no": "Prompt",
+        "es": "Prompt",
+        "da": "Prompt",
+        "ru": "Запрос",
+        "pl": "Prompt",
+        "ko": "프롬프트",
+        "ar": "مطالبة"
+      },
+      "example": "What is in this image?"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "app": {
+    "settings": {
+      "api_key": {
+        "title": "API Sleutel",
+        "label": "Voer uw Mistral AI API sleutel in",
+        "description": "Haal die van jou op https://console.mistral.ai/"
+      },
+      "save": "Opslaan",
+      "saved": "Instellingen opgeslagen!"
+    }
+  },
+  "flow": {
+    "actions": {
+      "ask_mistral": {
+        "title": "Vraag Mistral",
+        "args": {
+          "prompt": "Prompt",
+          "model": "Model",
+          "system_prompt": "Systeem prompt",
+          "max_tokens": "Max Tokens"
+        },
+        "tokens": {
+          "response": "Reactie"
+        }
+      }
+    },
+    "triggers": {
+      "mistral_responded": {
+        "title": "Mistral AI heeft geantwoord",
+        "tokens": {
+          "response": "Reactie",
+          "prompt": "Prompt"
+        }
+      }
+    }
+  }
+}

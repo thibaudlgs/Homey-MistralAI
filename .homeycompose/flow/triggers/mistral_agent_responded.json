@@ -1,0 +1,59 @@
+{
+  "title": {
+    "en": "Mistral Agent responded",
+    "nl": "Mistral Agent heeft geantwoord",
+    "de": "Mistral Agent hat geantwortet",
+    "fr": "L'agent Mistral a répondu",
+    "it": "L'agente Mistral ha risposto",
+    "sv": "Mistral Agent svarade",
+    "no": "Mistral Agent har svart",
+    "es": "Mistral Agent ha respondido",
+    "da": "Mistral Agent svarede",
+    "ru": "Mistral Agent ответил",
+    "pl": "Mistral Agent odpowiedział",
+    "ko": "Mistral Agent 응답함",
+    "ar": "رد وكيل Mistral"
+  },
+  "tokens": [
+    {
+      "name": "response",
+      "type": "string",
+      "title": {
+        "en": "Response",
+        "nl": "Reactie",
+        "de": "Antwort",
+        "fr": "Réponse",
+        "it": "Risposta",
+        "sv": "Svar",
+        "no": "Svar",
+        "es": "Respuesta",
+        "da": "Svar",
+        "ru": "Ответ",
+        "pl": "Odpowiedź",
+        "ko": "응답",
+        "ar": "الرد"
+      },
+      "example": "Of course! Here's what I found..."
+    },
+    {
+      "name": "prompt",
+      "type": "string",
+      "title": {
+        "en": "Prompt",
+        "nl": "Prompt",
+        "de": "Prompt",
+        "fr": "Invite",
+        "it": "Prompt",
+        "sv": "Prompt",
+        "no": "Prompt",
+        "es": "Prompt",
+        "da": "Prompt",
+        "ru": "Запрос",
+        "pl": "Prompt",
+        "ko": "프롬프트",
+        "ar": "مطالبة"
+      },
+      "example": "What's the weather like?"
+    }
+  ]
+}

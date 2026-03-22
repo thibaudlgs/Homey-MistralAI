@@ -1,0 +1,38 @@
+{
+  "app": {
+    "settings": {
+      "api_key": {
+        "title": "API 키",
+        "label": "Mistral AI API 키를 입력하세요",
+        "description": "https://console.mistral.ai/에서 받으세요"
+      },
+      "save": "저장",
+      "saved": "설정이 저장되었습니다!"
+    }
+  },
+  "flow": {
+    "actions": {
+      "ask_mistral": {
+        "title": "Mistral에게 질문하기",
+        "args": {
+          "prompt": "프롬프트",
+          "model": "모델",
+          "system_prompt": "시스템 프롬프트",
+          "max_tokens": "최대 토큰"
+        },
+        "tokens": {
+          "response": "응답"
+        }
+      }
+    },
+    "triggers": {
+      "mistral_responded": {
+        "title": "Mistral AI 응답함",
+        "tokens": {
+          "response": "응답",
+          "prompt": "프롬프트"
+        }
+      }
+    }
+  }
+}

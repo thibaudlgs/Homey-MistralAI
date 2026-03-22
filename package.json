@@ -1,0 +1,17 @@
+{
+  "name": "com.mistral.ai",
+  "version": "1.0.1",
+  "description": "Mistral AI integration for Homey Pro",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "app": {
+    "settings": {
+      "api_key": {
+        "title": "API-nøgle",
+        "label": "Indtast din Mistral AI API-nøgle",
+        "description": "Få din på https://console.mistral.ai/"
+      },
+      "save": "Gem",
+      "saved": "Indstillinger gemt!"
+    }
+  },
+  "flow": {
+    "actions": {
+      "ask_mistral": {
+        "title": "Spørg Mistral",
+        "args": {
+          "prompt": "Prompt",
+          "model": "Model",
+          "system_prompt": "Systemprompt",
+          "max_tokens": "Max Tokens"
+        },
+        "tokens": {
+          "response": "Svar"
+        }
+      }
+    },
+    "triggers": {
+      "mistral_responded": {
+        "title": "Mistral AI svarede",
+        "tokens": {
+          "response": "Svar",
+          "prompt": "Prompt"
+        }
+      }
+    }
+  }
+}

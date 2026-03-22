@@ -1,0 +1,38 @@
+{
+  "app": {
+    "settings": {
+      "api_key": {
+        "title": "Clave API",
+        "label": "Ingrese su clave API de Mistral AI",
+        "description": "Consigue la tuya en https://console.mistral.ai/"
+      },
+      "save": "Guardar",
+      "saved": "¡Configuraciones guardadas!"
+    }
+  },
+  "flow": {
+    "actions": {
+      "ask_mistral": {
+        "title": "Preguntar a Mistral",
+        "args": {
+          "prompt": "Prompt",
+          "model": "Modelo",
+          "system_prompt": "Prompt del sistema",
+          "max_tokens": "Max Tokens"
+        },
+        "tokens": {
+          "response": "Respuesta"
+        }
+      }
+    },
+    "triggers": {
+      "mistral_responded": {
+        "title": "Mistral AI ha respondido",
+        "tokens": {
+          "response": "Respuesta",
+          "prompt": "Prompt"
+        }
+      }
+    }
+  }
+}
