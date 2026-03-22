@@ -25,6 +25,7 @@ Fine-tune each request directly in the Flow card:
 
 ## 📝 NOTES
 
+- Mistral provide generous free API rates using experiments
 - Model performance and response times depend on the selected Mistral model.
 - Requires an active internet connection on your Homey Pro.
 - Make sure to keep your API key secure; it is stored locally on your Homey Pro.
