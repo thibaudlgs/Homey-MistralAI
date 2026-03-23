@@ -29,3 +29,9 @@ Fine-tune each request directly in the Flow card:
 - Model performance and response times depend on the selected Mistral model.
 - Requires an active internet connection on your Homey Pro.
 - Make sure to keep your API key secure; it is stored locally on your Homey Pro.
+
+## Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 0.0.1 | 2026-03-22 | Fisrst beta version|
