@@ -1,0 +1,158 @@
+{
+  "title": {
+    "en": "Control devices with prompt",
+    "nl": "Stuur apparaten aan met prompt",
+    "de": "Geräte per Prompt steuern",
+    "fr": "Contrôler des appareils avec un prompt",
+    "it": "Controlla dispositivi con un prompt",
+    "sv": "Styr enheter med prompt",
+    "no": "Styr enheter med prompt",
+    "es": "Controlar dispositivos con un prompt",
+    "da": "Styr enheder med prompt",
+    "ru": "Управлять устройствами через запрос",
+    "pl": "Steruj urządzeniami za pomocą promptu",
+    "ko": "프롬프트로 기기 제어",
+    "ar": "التحكم في الأجهزة عبر prompt"
+  },
+  "titleFormatted": {
+    "en": "Control devices: [[prompt]] using [[model]] (Max: [[max_tokens]])",
+    "nl": "Stuur apparaten aan: [[prompt]] met [[model]] (Max: [[max_tokens]])",
+    "de": "Geräte steuern: [[prompt]] mit [[model]] (Max: [[max_tokens]])",
+    "fr": "Contrôler des appareils: [[prompt]] avec [[model]] (Max: [[max_tokens]])",
+    "it": "Controlla dispositivi: [[prompt]] con [[model]] (Max: [[max_tokens]])",
+    "sv": "Styr enheter: [[prompt]] med [[model]] (Max: [[max_tokens]])",
+    "no": "Styr enheter: [[prompt]] med [[model]] (Maks: [[max_tokens]])",
+    "es": "Controlar dispositivos: [[prompt]] usando [[model]] (Max: [[max_tokens]])",
+    "da": "Styr enheder: [[prompt]] med [[model]] (Max: [[max_tokens]])",
+    "ru": "Управлять устройствами: [[prompt]] используя [[model]] (Макс: [[max_tokens]])",
+    "pl": "Steruj urządzeniami: [[prompt]] używając [[model]] (Maks: [[max_tokens]])",
+    "ko": "기기 제어 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]])",
+    "ar": "التحكم في الأجهزة: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]])"
+  },
+  "hint": {
+    "en": "Send a natural language command to Mistral AI which will interpret it and control your Homey devices accordingly. Mistral will receive the list of your devices and their capabilities automatically.",
+    "nl": "Stuur een opdracht in gewone taal naar Mistral AI. Mistral interpreteert de opdracht en stuurt je Homey-apparaten aan. De lijst met apparaten en hun mogelijkheden wordt automatisch meegestuurd.",
+    "de": "Senden Sie einen Befehl in natürlicher Sprache an Mistral AI, das ihn interpretiert und Ihre Homey-Geräte entsprechend steuert. Mistral erhält automatisch die Liste Ihrer Geräte und deren Fähigkeiten.",
+    "fr": "Envoyez une commande en langage naturel à Mistral AI qui l'interprétera et contrôlera vos appareils Homey en conséquence. Mistral reçoit automatiquement la liste de vos appareils et leurs capacités.",
+    "it": "Invia un comando in linguaggio naturale a Mistral AI che lo interpreterà e controllerà i tuoi dispositivi Homey di conseguenza. Mistral riceve automaticamente l'elenco dei tuoi dispositivi e delle loro capacità.",
+    "sv": "Skicka ett kommando på naturligt språk till Mistral AI som tolkar det och styr dina Homey-enheter därefter. Mistral tar emot listan över dina enheter och deras funktioner automatiskt.",
+    "no": "Send en kommando på naturlig språk til Mistral AI som tolker den og styrer Homey-enhetene dine deretter. Mistral mottar automatisk listen over enhetene dine og deres funksjoner.",
+    "es": "Envía un comando en lenguaje natural a Mistral AI, que lo interpretará y controlará tus dispositivos Homey en consecuencia. Mistral recibe automáticamente la lista de tus dispositivos y sus capacidades.",
+    "da": "Send en kommando på naturligt sprog til Mistral AI, som fortolker den og styrer dine Homey-enheder derefter. Mistral modtager automatisk listen over dine enheder og deres funktioner.",
+    "ru": "Отправьте команду на естественном языке в Mistral AI, который интерпретирует её и управляет вашими устройствами Homey. Mistral автоматически получает список ваших устройств и их возможностей.",
+    "pl": "Wyślij polecenie w języku naturalnym do Mistral AI, który je zinterpretuje i odpowiednio steruje urządzeniami Homey. Mistral automatycznie otrzymuje listę urządzeń i ich możliwości.",
+    "ko": "자연어 명령을 Mistral AI에 전송하면 해석하여 Homey 기기를 제어합니다. Mistral은 기기 목록과 기능을 자동으로 받습니다.",
+    "ar": "أرسل أمراً بلغة طبيعية إلى Mistral AI الذي سيفسره ويتحكم في أجهزة Homey الخاصة بك وفقاً لذلك. يتلقى Mistral تلقائياً قائمة أجهزتك وإمكانياتها."
+  },
+  "args": [
+    {
+      "name": "prompt",
+      "type": "text",
+      "placeholder": {
+        "en": "Turn on the living room light...",
+        "nl": "Zet het woonkamerlicht aan...",
+        "de": "Wohnzimmerlicht einschalten...",
+        "fr": "Allumer la lumière du salon...",
+        "it": "Accendi la luce del soggiorno...",
+        "sv": "Tänd vardagsrumsljuset...",
+        "no": "Skru på stuelampen...",
+        "es": "Encender la luz del salón...",
+        "da": "Tænd stuelampen...",
+        "ru": "Включить свет в гостиной...",
+        "pl": "Włącz światło w salonie...",
+        "ko": "거실 조명 켜줘...",
+        "ar": "تشغيل ضوء غرفة المعيشة..."
+      }
+    },
+    {
+      "name": "model",
+      "type": "autocomplete",
+      "placeholder": {
+        "en": "Type or select a model...",
+        "nl": "Typ of selecteer een model...",
+        "de": "Tippen oder Modell auswählen...",
+        "fr": "Saisir ou sélectionner un modèle...",
+        "it": "Digita o seleziona un modello...",
+        "sv": "Skriv eller välj en modell...",
+        "no": "Skriv eller velg en modell...",
+        "es": "Escriba o seleccione un modelo...",
+        "da": "Skriv eller vælg en model...",
+        "ru": "Введите или выберите модель...",
+        "pl": "Wpisz lub wybierz model...",
+        "ko": "모델을 입력하거나 선택하세요...",
+        "ar": "اكتب أو حدد نموذجًا..."
+      }
+    },
+    {
+      "name": "max_tokens",
+      "type": "number",
+      "placeholder": {
+        "en": "400"
+      },
+      "min": 1,
+      "max": 1024
+    }
+  ],
+  "tokens": [
+    {
+      "name": "explanation",
+      "type": "string",
+      "title": {
+        "en": "Explanation",
+        "nl": "Uitleg",
+        "de": "Erklärung",
+        "fr": "Explication",
+        "it": "Spiegazione",
+        "sv": "Förklaring",
+        "no": "Forklaring",
+        "es": "Explicación",
+        "da": "Forklaring",
+        "ru": "Объяснение",
+        "pl": "Wyjaśnienie",
+        "ko": "설명",
+        "ar": "الشرح"
+      },
+      "example": "Turned on the living room light."
+    },
+    {
+      "name": "devices_controlled",
+      "type": "number",
+      "title": {
+        "en": "Devices controlled",
+        "nl": "Aangestuurde apparaten",
+        "de": "Gesteuerte Geräte",
+        "fr": "Appareils contrôlés",
+        "it": "Dispositivi controllati",
+        "sv": "Styrda enheter",
+        "no": "Styrte enheter",
+        "es": "Dispositivos controlados",
+        "da": "Styrede enheder",
+        "ru": "Управляемые устройства",
+        "pl": "Sterowane urządzenia",
+        "ko": "제어된 기기 수",
+        "ar": "الأجهزة المتحكم بها"
+      },
+      "example": 1
+    },
+    {
+      "name": "changes_json",
+      "type": "string",
+      "title": {
+        "en": "Changes JSON",
+        "nl": "Wijzigingen JSON",
+        "de": "Änderungen JSON",
+        "fr": "Modifications JSON",
+        "it": "Modifiche JSON",
+        "sv": "Ändringar JSON",
+        "no": "Endringer JSON",
+        "es": "Cambios JSON",
+        "da": "Ændringer JSON",
+        "ru": "Изменения JSON",
+        "pl": "Zmiany JSON",
+        "ko": "변경 메타데이터 JSON",
+        "ar": "تغيير البيانات الوصفية JSON"
+      },
+      "example": "[{\"device\":\"Light\",\"capability\":\"onoff\",\"value\":true}]"
+    }
+  ]
+}

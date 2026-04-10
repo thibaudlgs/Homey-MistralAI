@@ -41,7 +41,9 @@
   "category": [
     "internet"
   ],
-  "permissions": [],
+  "permissions": [
+    "homey:manager:api"
+  ],
   "images": {
     "large": "assets/images/large.jpg",
     "small": "assets/images/small.jpg"

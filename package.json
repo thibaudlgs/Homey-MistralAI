@@ -9,6 +9,7 @@
   "author": "Antigravity",
   "license": "ISC",
   "dependencies": {
+    "homey-api": "^3.17.3",
     "node-fetch": "^2.7.0"
   },
   "devDependencies": {

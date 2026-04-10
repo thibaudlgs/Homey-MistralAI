@@ -35,3 +35,4 @@ Fine-tune each request directly in the Flow card:
 | Version | Date | Changes |
 |---------|------|---------|
 | 0.0.1 | 2026-03-22 | Fisrst beta version|
+| 0.0.2 | 2026-04-10 | Added device control feature|
