@@ -15,19 +15,19 @@
     "ar": "اسأل وكيل Mistral"
   },
   "titleFormatted": {
-    "en": "Ask Mistral Agent: [[prompt]] using Agent [[agent_id]] (Max: [[max_tokens]])",
-    "nl": "Vraag Mistral Agent: [[prompt]] met Agent [[agent_id]] (Max: [[max_tokens]])",
-    "de": "Mistral Agent fragen: [[prompt]] mit Agent [[agent_id]] (Max: [[max_tokens]])",
-    "fr": "Demander à l'agent Mistral: [[prompt]] avec Agent [[agent_id]] (Max: [[max_tokens]])",
-    "it": "Chiedi all'agente Mistral: [[prompt]] con Agente [[agent_id]] (Max: [[max_tokens]])",
-    "sv": "Fråga Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
-    "no": "Spør Mistral Agent: [[prompt]] med Agent [[agent_id]] (Maks: [[max_tokens]])",
-    "es": "Preguntar al Agente Mistral: [[prompt]] usando Agente [[agent_id]] (Max: [[max_tokens]])",
-    "da": "Spørg Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
-    "ru": "Спросить Mistral Agent: [[prompt]] используя Агент [[agent_id]] (Макс: [[max_tokens]])",
-    "pl": "Zapytaj Mistral Agent: [[prompt]] używając Agenta [[agent_id]] (Maks: [[max_tokens]])",
-    "ko": "Mistral Agent에게 질문 (Agent [[agent_id]] 사용): [[prompt]] (최대: [[max_tokens]])",
-    "ar": "اسأل وكيل Mistral: [[prompt]] باستخدام الوكيل [[agent_id]] (الحد الأقصى: [[max_tokens]])"
+    "en": "Ask Mistral Agent: [[prompt]] using Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "nl": "Vraag Mistral Agent: [[prompt]] met Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "de": "Mistral Agent fragen: [[prompt]] mit Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "fr": "Demander à l'agent Mistral: [[prompt]] avec Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "it": "Chiedi all'agente Mistral: [[prompt]] con Agente [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "sv": "Fråga Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "no": "Spør Mistral Agent: [[prompt]] med Agent [[agent_id]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+    "es": "Preguntar al Agente Mistral: [[prompt]] usando Agente [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "da": "Spørg Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "ru": "Спросить Mistral Agent: [[prompt]] используя Агент [[agent_id]] (Макс: [[max_tokens]], ID: [[conversation_id]])",
+    "pl": "Zapytaj Mistral Agent: [[prompt]] używając Agenta [[agent_id]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+    "ko": "Mistral Agent에게 질문 (Agent [[agent_id]] 사용): [[prompt]] (최대: [[max_tokens]], ID: [[conversation_id]])",
+    "ar": "اسأل وكيل Mistral: [[prompt]] باستخدام الوكيل [[agent_id]] (الحد الأقصى: [[max_tokens]]، المعرّف: [[conversation_id]])"
   },
   "hint": {
     "en": "Send a prompt to a custom Mistral AI Agent.",
@@ -91,6 +91,19 @@
       },
       "min": 1,
       "max": 8192
+    },
+    {
+      "name": "conversation_id",
+      "type": "text",
+      "title": {
+        "en": "Conversation ID (optional)",
+        "fr": "ID de conversation (optionnel)"
+      },
+      "placeholder": {
+        "en": "Leave empty for single-use",
+        "fr": "Laisser vide pour usage unique"
+      },
+      "required": false
     }
   ],
   "tokens": [

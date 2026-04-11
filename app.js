@@ -25,12 +25,15 @@ class MistralApp extends Homey.App {
   async onInit() {
     this.log('Mistral AI App initialized');
 
+    this.conversations = {};
+
     try {
       this.homeyApi = await HomeyAPI.createAppAPI({ homey: this.homey });
       this.log('Homey API instantiated successfully');
     } catch (err) {
       this.error('Failed to instantiate Homey API', err);
     }
+
 
     // --- Flow Action: Ask Mistral ---
     const askMistralAction = this.homey.flow.getActionCard('ask_mistral');
@@ -60,7 +63,7 @@ class MistralApp extends Homey.App {
     });
 
     askMistralAction.registerRunListener(async (args) => {
-      const { prompt, model, max_tokens } = args;
+      const { prompt, model, max_tokens, conversation_id } = args;
 
       if (!prompt || !prompt.trim()) {
         throw new Error('Prompt cannot be empty.');
@@ -86,10 +89,14 @@ class MistralApp extends Homey.App {
         ? Math.min(Math.max(parsedTokens, 1), 4096)
         : 200;
 
+      const convId = conversation_id && conversation_id.trim() ? conversation_id.trim() : null;
+      const history = convId ? (this.conversations[convId] || []) : [];
+
       const body = {
         model: resolvedModel,
         messages: [
           { role: 'system', content: resolvedSystemPrompt },
+          ...history,
           { role: 'user', content: prompt.trim() }
         ],
         max_tokens: resolvedMaxTokens,
@@ -101,6 +108,15 @@ class MistralApp extends Homey.App {
 
       if (!responseText) {
         throw new Error('Mistral AI returned an empty or unexpected response.');
+      }
+
+      if (convId) {
+        if (!this.conversations[convId]) this.conversations[convId] = [];
+        this.conversations[convId].push({ role: 'user', content: prompt.trim() });
+        this.conversations[convId].push({ role: 'assistant', content: responseText });
+        if (this.conversations[convId].length > 20) {
+          this.conversations[convId] = this.conversations[convId].slice(-20);
+        }
       }
 
       this.log(`Mistral responded: ${responseText.substring(0, 80)}...`);
@@ -214,7 +230,7 @@ class MistralApp extends Homey.App {
     const askMistralAgentAction = this.homey.flow.getActionCard('ask_mistral_agent');
     
     askMistralAgentAction.registerRunListener(async (args) => {
-      const { prompt, agent_id, max_tokens } = args;
+      const { prompt, agent_id, max_tokens, conversation_id } = args;
 
       if (!prompt || !prompt.trim()) {
         throw new Error('Prompt cannot be empty.');
@@ -228,9 +244,13 @@ class MistralApp extends Homey.App {
         ? Math.min(Math.max(parsedTokens, 1), 4096)
         : 800;
 
+      const convId = conversation_id && conversation_id.trim() ? conversation_id.trim() : null;
+      const history = convId ? (this.conversations[convId] || []) : [];
+
       const body = {
         agent_id: agent_id.trim(),
         messages: [
+          ...history,
           { role: 'user', content: prompt.trim() }
         ],
         max_tokens: resolvedMaxTokens
@@ -241,6 +261,15 @@ class MistralApp extends Homey.App {
 
       if (!responseText) {
         throw new Error('Mistral AI returned an empty or unexpected response.');
+      }
+
+      if (convId) {
+        if (!this.conversations[convId]) this.conversations[convId] = [];
+        this.conversations[convId].push({ role: 'user', content: prompt.trim() });
+        this.conversations[convId].push({ role: 'assistant', content: responseText });
+        if (this.conversations[convId].length > 20) {
+          this.conversations[convId] = this.conversations[convId].slice(-20);
+        }
       }
 
       this.log(`Mistral Agent responded: ${responseText.substring(0, 80)}...`);
@@ -279,7 +308,7 @@ class MistralApp extends Homey.App {
     });
 
     controlDevicesAction.registerRunListener(async (args) => {
-      const { prompt, model, max_tokens } = args;
+      const { prompt, model, max_tokens, conversation_id } = args;
 
       if (!prompt || !prompt.trim()) {
         throw new Error('Prompt cannot be empty.');
@@ -337,10 +366,14 @@ Rules:
 
 ${deviceContext}`;
 
+      const convId = conversation_id && conversation_id.trim() ? conversation_id.trim() : null;
+      const history = convId ? (this.conversations[convId] || []) : [];
+
       const body = {
         model: resolvedModel,
         messages: [
           { role: 'system', content: systemPrompt },
+          ...history,
           { role: 'user', content: prompt.trim() }
         ],
         max_tokens: resolvedMaxTokens,
@@ -367,6 +400,16 @@ ${deviceContext}`;
 
       const actions = Array.isArray(parsed.actions) ? parsed.actions : [];
       const explanation = typeof parsed.explanation === 'string' ? parsed.explanation : '';
+
+      if (convId) {
+        if (!this.conversations[convId]) this.conversations[convId] = [];
+        this.conversations[convId].push({ role: 'user', content: prompt.trim() });
+        this.conversations[convId].push({ role: 'assistant', content: rawText });
+        if (this.conversations[convId].length > 20) {
+          this.conversations[convId] = this.conversations[convId].slice(-20);
+        }
+      }
+
       let devicesControlled = 0;
       const executedActions = [];
 
@@ -412,6 +455,17 @@ ${deviceContext}`;
         changes_json: JSON.stringify(executedActions) 
       };
     });
+
+    // --- Flow Action: Reset Conversation ---
+    const resetConversationAction = this.homey.flow.getActionCard('reset_conversation');
+    resetConversationAction.registerRunListener(async (args) => {
+      const convId = args.conversation_id && args.conversation_id.trim() ? args.conversation_id.trim() : null;
+      if (convId) {
+        delete this.conversations[convId];
+        this.log(`[reset_conversation] Cleared conversation: "${convId}"`);
+      }
+    });
+
 
     this.log('Flow cards registered');
   }

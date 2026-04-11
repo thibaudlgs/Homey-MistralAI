@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Reset conversation",
+    "fr": "Réinitialiser la conversation"
+  },
+  "titleFormatted": {
+    "en": "Reset conversation: [[conversation_id]]",
+    "fr": "Réinitialiser la conversation: [[conversation_id]]"
+  },
+  "hint": {
+    "en": "Clear the conversation history for the given ID.",
+    "fr": "Efface l'historique de la conversation pour l'ID donné."
+  },
+  "args": [
+    {
+      "name": "conversation_id",
+      "type": "text",
+      "title": {
+        "en": "Conversation ID",
+        "fr": "ID de conversation"
+      },
+      "placeholder": {
+        "en": "e.g. chat_living_room",
+        "fr": "ex: chat_salon"
+      }
+    }
+  ]
+}

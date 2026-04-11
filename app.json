@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.mistral.ai",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "sdk": 3,
   "runtime": "nodejs",
   "compatibility": ">=5.0.0",
@@ -251,19 +251,19 @@
           "ar": "اسأل Mistral"
         },
         "titleFormatted": {
-          "en": "Ask Mistral: [[prompt]] using [[model]] (Max: [[max_tokens]])",
-          "nl": "Vraag Mistral: [[prompt]] met [[model]] (Max: [[max_tokens]])",
-          "de": "Mistral fragen: [[prompt]] mit [[model]] (Max: [[max_tokens]])",
-          "fr": "Demander à Mistral: [[prompt]] avec [[model]] (Max: [[max_tokens]])",
-          "it": "Chiedi a Mistral: [[prompt]] con [[model]] (Max: [[max_tokens]])",
-          "sv": "Fråga Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]])",
-          "no": "Spør Mistral: [[prompt]] med [[model]] (Maks: [[max_tokens]])",
-          "es": "Preguntar a Mistral: [[prompt]] usando [[model]] (Max: [[max_tokens]])",
-          "da": "Spørg Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]])",
-          "ru": "Спросить Mistral: [[prompt]] используя [[model]] (Макс: [[max_tokens]])",
-          "pl": "Zapytaj Mistral: [[prompt]] używając [[model]] (Maks: [[max_tokens]])",
-          "ko": "Mistral에게 질문 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]])",
-          "ar": "اسأل Mistral: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]])"
+          "en": "Ask Mistral: [[prompt]] using [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "nl": "Vraag Mistral: [[prompt]] met [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "de": "Mistral fragen: [[prompt]] mit [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "fr": "Demander à Mistral: [[prompt]] avec [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "it": "Chiedi a Mistral: [[prompt]] con [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "sv": "Fråga Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "no": "Spør Mistral: [[prompt]] med [[model]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+          "es": "Preguntar a Mistral: [[prompt]] usando [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "da": "Spørg Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "ru": "Спросить Mistral: [[prompt]] используя [[model]] (Макс: [[max_tokens]], ID: [[conversation_id]])",
+          "pl": "Zapytaj Mistral: [[prompt]] używając [[model]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+          "ko": "Mistral에게 질문 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]], ID: [[conversation_id]])",
+          "ar": "اسأل Mistral: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]]، المعرّف: [[conversation_id]])"
         },
         "hint": {
           "en": "Send a prompt to Mistral AI and wait for the response. You can configure the system prompt behavior from the Mistral AI app settings.",
@@ -327,6 +327,19 @@
             },
             "min": 1,
             "max": 4096
+          },
+          {
+            "name": "conversation_id",
+            "type": "text",
+            "title": {
+              "en": "Conversation ID (optional)",
+              "fr": "ID de conversation (optionnel)"
+            },
+            "placeholder": {
+              "en": "Leave empty for single-use",
+              "fr": "Laisser vide pour usage unique"
+            },
+            "required": false
           }
         ],
         "tokens": [
@@ -370,19 +383,19 @@
           "ar": "اسأل وكيل Mistral"
         },
         "titleFormatted": {
-          "en": "Ask Mistral Agent: [[prompt]] using Agent [[agent_id]] (Max: [[max_tokens]])",
-          "nl": "Vraag Mistral Agent: [[prompt]] met Agent [[agent_id]] (Max: [[max_tokens]])",
-          "de": "Mistral Agent fragen: [[prompt]] mit Agent [[agent_id]] (Max: [[max_tokens]])",
-          "fr": "Demander à l'agent Mistral: [[prompt]] avec Agent [[agent_id]] (Max: [[max_tokens]])",
-          "it": "Chiedi all'agente Mistral: [[prompt]] con Agente [[agent_id]] (Max: [[max_tokens]])",
-          "sv": "Fråga Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
-          "no": "Spør Mistral Agent: [[prompt]] med Agent [[agent_id]] (Maks: [[max_tokens]])",
-          "es": "Preguntar al Agente Mistral: [[prompt]] usando Agente [[agent_id]] (Max: [[max_tokens]])",
-          "da": "Spørg Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]])",
-          "ru": "Спросить Mistral Agent: [[prompt]] используя Агент [[agent_id]] (Макс: [[max_tokens]])",
-          "pl": "Zapytaj Mistral Agent: [[prompt]] używając Agenta [[agent_id]] (Maks: [[max_tokens]])",
-          "ko": "Mistral Agent에게 질문 (Agent [[agent_id]] 사용): [[prompt]] (최대: [[max_tokens]])",
-          "ar": "اسأل وكيل Mistral: [[prompt]] باستخدام الوكيل [[agent_id]] (الحد الأقصى: [[max_tokens]])"
+          "en": "Ask Mistral Agent: [[prompt]] using Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "nl": "Vraag Mistral Agent: [[prompt]] met Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "de": "Mistral Agent fragen: [[prompt]] mit Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "fr": "Demander à l'agent Mistral: [[prompt]] avec Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "it": "Chiedi all'agente Mistral: [[prompt]] con Agente [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "sv": "Fråga Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "no": "Spør Mistral Agent: [[prompt]] med Agent [[agent_id]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+          "es": "Preguntar al Agente Mistral: [[prompt]] usando Agente [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "da": "Spørg Mistral Agent: [[prompt]] med Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "ru": "Спросить Mistral Agent: [[prompt]] используя Агент [[agent_id]] (Макс: [[max_tokens]], ID: [[conversation_id]])",
+          "pl": "Zapytaj Mistral Agent: [[prompt]] używając Agenta [[agent_id]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+          "ko": "Mistral Agent에게 질문 (Agent [[agent_id]] 사용): [[prompt]] (최대: [[max_tokens]], ID: [[conversation_id]])",
+          "ar": "اسأل وكيل Mistral: [[prompt]] باستخدام الوكيل [[agent_id]] (الحد الأقصى: [[max_tokens]]، المعرّف: [[conversation_id]])"
         },
         "hint": {
           "en": "Send a prompt to a custom Mistral AI Agent.",
@@ -446,6 +459,19 @@
             },
             "min": 1,
             "max": 8192
+          },
+          {
+            "name": "conversation_id",
+            "type": "text",
+            "title": {
+              "en": "Conversation ID (optional)",
+              "fr": "ID de conversation (optionnel)"
+            },
+            "placeholder": {
+              "en": "Leave empty for single-use",
+              "fr": "Laisser vide pour usage unique"
+            },
+            "required": false
           }
         ],
         "tokens": [
@@ -608,19 +634,19 @@
           "ar": "التحكم في الأجهزة عبر prompt"
         },
         "titleFormatted": {
-          "en": "Control devices: [[prompt]] using [[model]] (Max: [[max_tokens]])",
-          "nl": "Stuur apparaten aan: [[prompt]] met [[model]] (Max: [[max_tokens]])",
-          "de": "Geräte steuern: [[prompt]] mit [[model]] (Max: [[max_tokens]])",
-          "fr": "Contrôler des appareils: [[prompt]] avec [[model]] (Max: [[max_tokens]])",
-          "it": "Controlla dispositivi: [[prompt]] con [[model]] (Max: [[max_tokens]])",
-          "sv": "Styr enheter: [[prompt]] med [[model]] (Max: [[max_tokens]])",
-          "no": "Styr enheter: [[prompt]] med [[model]] (Maks: [[max_tokens]])",
-          "es": "Controlar dispositivos: [[prompt]] usando [[model]] (Max: [[max_tokens]])",
-          "da": "Styr enheder: [[prompt]] med [[model]] (Max: [[max_tokens]])",
-          "ru": "Управлять устройствами: [[prompt]] используя [[model]] (Макс: [[max_tokens]])",
-          "pl": "Steruj urządzeniami: [[prompt]] używając [[model]] (Maks: [[max_tokens]])",
-          "ko": "기기 제어 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]])",
-          "ar": "التحكم في الأجهزة: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]])"
+          "en": "Control devices: [[prompt]] using [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "nl": "Stuur apparaten aan: [[prompt]] met [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "de": "Geräte steuern: [[prompt]] mit [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "fr": "Contrôler des appareils: [[prompt]] avec [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "it": "Controlla dispositivi: [[prompt]] con [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "sv": "Styr enheter: [[prompt]] med [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "no": "Styr enheter: [[prompt]] med [[model]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+          "es": "Controlar dispositivos: [[prompt]] usando [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "da": "Styr enheder: [[prompt]] med [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+          "ru": "Управлять устройствами: [[prompt]] используя [[model]] (Макс: [[max_tokens]], ID: [[conversation_id]])",
+          "pl": "Steruj urządzeniami: [[prompt]] używając [[model]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+          "ko": "기기 제어 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]], ID: [[conversation_id]])",
+          "ar": "التحكم في الأجهزة: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]]، المعرّف: [[conversation_id]])"
         },
         "hint": {
           "en": "Send a natural language command to Mistral AI which will interpret it and control your Homey devices accordingly. Mistral will receive the list of your devices and their capabilities automatically.",
@@ -684,6 +710,19 @@
             },
             "min": 1,
             "max": 1024
+          },
+          {
+            "name": "conversation_id",
+            "type": "text",
+            "title": {
+              "en": "Conversation ID (optional)",
+              "fr": "ID de conversation (optionnel)"
+            },
+            "placeholder": {
+              "en": "Leave empty for single-use",
+              "fr": "Laisser vide pour usage unique"
+            },
+            "required": false
           }
         ],
         "tokens": [
@@ -749,6 +788,35 @@
           }
         ],
         "id": "control_devices_prompt"
+      },
+      {
+        "title": {
+          "en": "Reset conversation",
+          "fr": "Réinitialiser la conversation"
+        },
+        "titleFormatted": {
+          "en": "Reset conversation: [[conversation_id]]",
+          "fr": "Réinitialiser la conversation: [[conversation_id]]"
+        },
+        "hint": {
+          "en": "Clear the conversation history for the given ID.",
+          "fr": "Efface l'historique de la conversation pour l'ID donné."
+        },
+        "args": [
+          {
+            "name": "conversation_id",
+            "type": "text",
+            "title": {
+              "en": "Conversation ID",
+              "fr": "ID de conversation"
+            },
+            "placeholder": {
+              "en": "e.g. chat_living_room",
+              "fr": "ex: chat_salon"
+            }
+          }
+        ],
+        "id": "reset_conversation"
       }
     ]
   }

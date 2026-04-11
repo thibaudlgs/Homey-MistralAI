@@ -15,19 +15,19 @@
     "ar": "اسأل Mistral"
   },
   "titleFormatted": {
-    "en": "Ask Mistral: [[prompt]] using [[model]] (Max: [[max_tokens]])",
-    "nl": "Vraag Mistral: [[prompt]] met [[model]] (Max: [[max_tokens]])",
-    "de": "Mistral fragen: [[prompt]] mit [[model]] (Max: [[max_tokens]])",
-    "fr": "Demander à Mistral: [[prompt]] avec [[model]] (Max: [[max_tokens]])",
-    "it": "Chiedi a Mistral: [[prompt]] con [[model]] (Max: [[max_tokens]])",
-    "sv": "Fråga Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]])",
-    "no": "Spør Mistral: [[prompt]] med [[model]] (Maks: [[max_tokens]])",
-    "es": "Preguntar a Mistral: [[prompt]] usando [[model]] (Max: [[max_tokens]])",
-    "da": "Spørg Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]])",
-    "ru": "Спросить Mistral: [[prompt]] используя [[model]] (Макс: [[max_tokens]])",
-    "pl": "Zapytaj Mistral: [[prompt]] używając [[model]] (Maks: [[max_tokens]])",
-    "ko": "Mistral에게 질문 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]])",
-    "ar": "اسأل Mistral: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]])"
+    "en": "Ask Mistral: [[prompt]] using [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "nl": "Vraag Mistral: [[prompt]] met [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "de": "Mistral fragen: [[prompt]] mit [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "fr": "Demander à Mistral: [[prompt]] avec [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "it": "Chiedi a Mistral: [[prompt]] con [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "sv": "Fråga Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "no": "Spør Mistral: [[prompt]] med [[model]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+    "es": "Preguntar a Mistral: [[prompt]] usando [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "da": "Spørg Mistral: [[prompt]] med [[model]] (Max: [[max_tokens]], ID: [[conversation_id]])",
+    "ru": "Спросить Mistral: [[prompt]] используя [[model]] (Макс: [[max_tokens]], ID: [[conversation_id]])",
+    "pl": "Zapytaj Mistral: [[prompt]] używając [[model]] (Maks: [[max_tokens]], ID: [[conversation_id]])",
+    "ko": "Mistral에게 질문 ([[model]] 사용): [[prompt]] (최대: [[max_tokens]], ID: [[conversation_id]])",
+    "ar": "اسأل Mistral: [[prompt]] باستخدام [[model]] (الحد الأقصى: [[max_tokens]]، المعرّف: [[conversation_id]])"
   },
   "hint": {
     "en": "Send a prompt to Mistral AI and wait for the response. You can configure the system prompt behavior from the Mistral AI app settings.",
@@ -91,6 +91,19 @@
       },
       "min": 1,
       "max": 4096
+    },
+    {
+      "name": "conversation_id",
+      "type": "text",
+      "title": {
+        "en": "Conversation ID (optional)",
+        "fr": "ID de conversation (optionnel)"
+      },
+      "placeholder": {
+        "en": "Leave empty for single-use",
+        "fr": "Laisser vide pour usage unique"
+      },
+      "required": false
     }
   ],
   "tokens": [
