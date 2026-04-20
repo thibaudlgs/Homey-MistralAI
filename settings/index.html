@@ -39,6 +39,84 @@
         margin-top: 10px;
         font-size: 0.9em;
       }
+      .section-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin: 28px 0 8px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #ddd;
+        color: #333;
+      }
+      .section-desc {
+        font-size: 0.82em;
+        color: #666;
+        margin-bottom: 14px;
+      }
+      .zone-group { margin-bottom: 14px; }
+      .zone-label {
+        font-size: 0.95em;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 4px;
+      }
+      .device-row {
+        display: flex;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid #f0f0f0;
+        gap: 8px;
+      }
+      .device-row:last-child { border-bottom: none; }
+      .device-name { flex: 1; font-size: 0.9em; }
+      .perm-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 70px;
+        font-size: 0.75em;
+        color: #888;
+        gap: 2px;
+      }
+      .perm-col input[type="checkbox"] { width: auto; cursor: pointer; }
+      .perm-header {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-bottom: 2px;
+        font-size: 0.78em;
+        color: #888;
+        font-weight: 600;
+      }
+      .perm-header-col { width: 70px; text-align: center; }
+      #perms-loading { font-size: 0.85em; color: #999; }
+      #perms-error   { font-size: 0.85em; color: #c00; }
+      .task-row {
+        display: flex;
+        align-items: center;
+        padding: 7px 4px;
+        border-bottom: 1px solid #f0f0f0;
+        gap: 8px;
+        font-size: 0.85em;
+      }
+      .task-row:last-child { border-bottom: none; }
+      .task-desc { flex: 1; }
+      .task-time { color: #777; font-size: 0.82em; white-space: nowrap; }
+      .task-status {
+        font-size: 0.78em; font-weight: 600; padding: 2px 6px;
+        border-radius: 10px; white-space: nowrap;
+      }
+      .task-status.pending  { background: #fff3cd; color: #856404; }
+      .task-status.done     { background: #d4edda; color: #155724; }
+      .task-status.failed   { background: #f8d7da; color: #721c24; }
+      .task-status.running  { background: #cce5ff; color: #004085; }
+      .task-delete {
+        background: none; border: none; color: #c00;
+        cursor: pointer; font-size: 1em; padding: 2px 6px;
+        border-radius: 4px; font-weight: bold;
+        line-height: 1;
+      }
+      .task-delete:hover { background: #fdd; }
+      #tasks-empty { font-size: 0.85em; color: #999; }
     </style>
   </head>
   <body>
@@ -52,8 +130,31 @@
       <textarea id="system_prompt" rows="4" style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;" placeholder="You are a helpful assistant integrated in a smart home system (Homey Pro). Be concise."></textarea>
       <p style="font-size: 0.8em; color: #666;" data-i18n="app.settings.system_prompt.description">Default system instruction for the AI.</p>
     </div>
+    <div class="section-title">Device Permissions</div>
+    <p class="section-desc">
+      Choose which devices are visible to the AI and which it can control.
+      By default all devices are fully accessible.
+    </p>
+    <div class="perm-header">
+      <span class="perm-header-col">Expose</span>
+      <span class="perm-header-col">Control</span>
+    </div>
+    <div id="device-permissions-list">
+      <div id="perms-loading">Loading devices...</div>
+      <div id="perms-error" style="display:none;"></div>
+    </div>
+
     <button id="save" data-i18n="app.settings.save">Save changes</button>
     <div id="status"></div>
+
+    <div class="section-title">Scheduled Tasks</div>
+    <p class="section-desc">
+      Tasks scheduled by the AI via "Control devices with prompt". Max 32 hours ahead. Auto-execute once &amp; persist across restarts.
+    </p>
+    <div id="tasks-list">
+      <div id="tasks-loading" style="font-size:0.85em;color:#999;">Loading tasks...</div>
+    </div>
+
 
     <script type="text/javascript">
       function onHomeyReady(Homey) {
@@ -73,6 +174,155 @@
           }
         });
 
+        // -------- Device Permissions --------
+        var permissionsMap = {};
+        var devicesCache   = [];
+        var zonesCache     = {};
+
+        var permsList    = document.getElementById('device-permissions-list');
+        var permsLoading = document.getElementById('perms-loading');
+        var permsError   = document.getElementById('perms-error');
+
+        Homey.get('device_permissions', function(err, savedRaw) {
+          if (!err && savedRaw) {
+            try { permissionsMap = JSON.parse(savedRaw); } catch(e) {}
+          }
+          loadDevicesAndZones();
+        });
+
+        function loadDevicesAndZones() {
+          Homey.api('GET', '/zones', function(err, zones) {
+            if (err) {
+              permsLoading.style.display = 'none';
+              permsError.style.display = 'block';
+              permsError.innerText = 'Failed to load zones: ' + (err.message || err);
+              return;
+            }
+            zonesCache = zones || {};
+            Homey.api('GET', '/devices', function(err2, devices) {
+              permsLoading.style.display = 'none';
+              if (err2) {
+                permsError.style.display = 'block';
+                permsError.innerText = 'Failed to load devices: ' + (err2.message || err2);
+                return;
+              }
+              devicesCache = Object.values(devices || {});
+              renderPermissionsList();
+            });
+          });
+        }
+
+        function renderPermissionsList() {
+          Array.from(permsList.children).forEach(function(child) {
+            if (child.id !== 'perms-loading' && child.id !== 'perms-error') {
+              permsList.removeChild(child);
+            }
+          });
+
+          if (devicesCache.length === 0) {
+            var noDevs = document.createElement('p');
+            noDevs.style.cssText = 'font-size:0.85em;color:#999;';
+            noDevs.innerText = 'No devices found.';
+            permsList.appendChild(noDevs);
+            return;
+          }
+
+          var byZone = {};
+          devicesCache.forEach(function(d) {
+            var zoneId = d.zone || '__none__';
+            if (!byZone[zoneId]) byZone[zoneId] = [];
+            byZone[zoneId].push(d);
+          });
+
+          var zoneIds = Object.keys(byZone).sort(function(a, b) {
+            if (a === '__none__') return 1;
+            if (b === '__none__') return -1;
+            var nameA = (zonesCache[a] && zonesCache[a].name) || '';
+            var nameB = (zonesCache[b] && zonesCache[b].name) || '';
+            return nameA.localeCompare(nameB);
+          });
+
+          zoneIds.forEach(function(zoneId) {
+            var zoneName = (zonesCache[zoneId] && zonesCache[zoneId].name) || 'No Zone';
+
+            var group = document.createElement('div');
+            group.className = 'zone-group';
+
+            var zoneLabel = document.createElement('div');
+            zoneLabel.className = 'zone-label';
+            zoneLabel.innerText = zoneName;
+            group.appendChild(zoneLabel);
+
+            byZone[zoneId].sort(function(a, b) {
+              return (a.name || '').localeCompare(b.name || '');
+            }).forEach(function(device) {
+              var perm = permissionsMap[device.id] || { expose: true, control: true };
+              var isExposed  = perm.expose  !== false;
+              var isControl  = isExposed && perm.control !== false;
+
+              var row = document.createElement('div');
+              row.className = 'device-row';
+
+              var nameSpan = document.createElement('span');
+              nameSpan.className = 'device-name';
+              nameSpan.innerText = device.name;
+              row.appendChild(nameSpan);
+
+              // Expose checkbox
+              var exposeCol = document.createElement('div');
+              exposeCol.className = 'perm-col';
+              var exposeLabel = document.createElement('label');
+              exposeLabel.innerText = 'Expose';
+              var exposeChk = document.createElement('input');
+              exposeChk.type    = 'checkbox';
+              exposeChk.checked = isExposed;
+              exposeChk.dataset.deviceId = device.id;
+              exposeCol.appendChild(exposeLabel);
+              exposeCol.appendChild(exposeChk);
+              row.appendChild(exposeCol);
+
+              // Control checkbox
+              var controlCol = document.createElement('div');
+              controlCol.className = 'perm-col';
+              var controlLabel = document.createElement('label');
+              controlLabel.innerText = 'Control';
+              var controlChk = document.createElement('input');
+              controlChk.type     = 'checkbox';
+              controlChk.checked  = isControl;
+              controlChk.disabled = !isExposed;
+              controlChk.dataset.deviceId = device.id;
+              controlCol.appendChild(controlLabel);
+              controlCol.appendChild(controlChk);
+              row.appendChild(controlCol);
+
+              exposeChk.addEventListener('change', function() {
+                var devId = this.dataset.deviceId;
+                var nowExposed = this.checked;
+                if (!permissionsMap[devId]) permissionsMap[devId] = { expose: true, control: true };
+                permissionsMap[devId].expose = nowExposed;
+                if (!nowExposed) {
+                  permissionsMap[devId].control = false;
+                  controlChk.checked  = false;
+                  controlChk.disabled = true;
+                } else {
+                  controlChk.disabled = false;
+                }
+              });
+
+              controlChk.addEventListener('change', function() {
+                var devId = this.dataset.deviceId;
+                if (!permissionsMap[devId]) permissionsMap[devId] = { expose: true, control: true };
+                permissionsMap[devId].control = this.checked;
+              });
+
+              group.appendChild(row);
+            });
+
+            permsList.appendChild(group);
+          });
+        }
+        // -------- End Device Permissions --------
+
         saveEl.addEventListener('click', function() {
           Homey.set('api_key', apiKeyEl.value, function(err) {
             if (err) {
@@ -84,18 +334,103 @@
               if (err2) {
                 statusEl.innerText = 'Error: ' + err2.message;
                 statusEl.style.color = 'red';
-              } else {
-                statusEl.innerText = 'Settings saved!';
-                statusEl.style.color = 'green';
-                setTimeout(function() {
-                  statusEl.innerText = '';
-                }, 3000);
+                return;
               }
+              var permsJson = (devicesCache.length > 0) ? JSON.stringify(permissionsMap) : null;
+              if (permsJson === null) {
+                statusEl.innerText = 'Settings saved! (Device permissions unchanged — devices failed to load)';
+                statusEl.style.color = 'green';
+                setTimeout(function() { statusEl.innerText = ''; }, 4000);
+                return;
+              }
+              Homey.set('device_permissions', permsJson, function(err3) {
+                if (err3) {
+                  statusEl.innerText = 'Error saving permissions: ' + err3.message;
+                  statusEl.style.color = 'red';
+                } else {
+                  statusEl.innerText = 'Settings saved!';
+                  statusEl.style.color = 'green';
+                  setTimeout(function() { statusEl.innerText = ''; }, 3000);
+                }
+              });
             });
           });
         });
         
         Homey.ready();
+
+        // -------- Scheduled Tasks --------
+        var tasksList = document.getElementById('tasks-list');
+        var tasksLoading = document.getElementById('tasks-loading');
+
+        function formatDateTime(iso) {
+          var d = new Date(iso);
+          return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderTasks(tasks) {
+          tasksList.innerHTML = '';
+          if (!tasks || tasks.length === 0) {
+            var empty = document.createElement('p');
+            empty.id = 'tasks-empty';
+            empty.innerText = 'No scheduled tasks.';
+            tasksList.appendChild(empty);
+            return;
+          }
+          tasks.sort(function(a, b) { return new Date(a.executeAt) - new Date(b.executeAt); });
+          tasks.forEach(function(t) {
+            var row = document.createElement('div');
+            row.className = 'task-row';
+
+            var desc = document.createElement('span');
+            desc.className = 'task-desc';
+            desc.innerText = t.description || '(no description)';
+            row.appendChild(desc);
+
+            var time = document.createElement('span');
+            time.className = 'task-time';
+            time.innerText = formatDateTime(t.executeAt);
+            row.appendChild(time);
+
+            var status = document.createElement('span');
+            status.className = 'task-status ' + (t.status || 'pending');
+            status.innerText = t.status || 'pending';
+            row.appendChild(status);
+
+            if (t.status === 'pending' || t.status === 'running') {
+              var delBtn = document.createElement('button');
+              delBtn.className = 'task-delete';
+              delBtn.title = 'Cancel task';
+              delBtn.innerText = '✕';
+              delBtn.dataset.taskId = t.id;
+              delBtn.addEventListener('click', function() {
+                var tid = this.dataset.taskId;
+                Homey.api('DELETE', '/tasks/' + tid, function(err) {
+                  if (err) { Homey.alert('Failed to cancel: ' + (err.message || err)); return; }
+                  loadTasks();
+                });
+              });
+              row.appendChild(delBtn);
+            }
+
+            tasksList.appendChild(row);
+          });
+        }
+
+        function loadTasks() {
+          Homey.api('GET', '/tasks', function(err, tasks) {
+            if (err) {
+              tasksList.innerHTML = '<p style="color:#c00;font-size:0.85em;">Failed to load tasks: ' + (err.message || err) + '</p>';
+              return;
+            }
+            renderTasks(tasks);
+          });
+        }
+
+        loadTasks();
+        // Auto-refresh tasks every 30s
+        setInterval(loadTasks, 30000);
+        // -------- End Scheduled Tasks --------
       }
     </script>
   </body>

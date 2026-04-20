@@ -21,11 +21,47 @@ const DEFAULT_VISION_MODELS = [
 
 const FETCH_TIMEOUT_MS = 30000;
 
+// --- Capability type hint lookup ---
+const CAP_TYPE_HINTS = {
+  onoff: 'bool', dim: '0.0-1.0',
+  light_hue: '0.0-1.0', light_saturation: '0.0-1.0',
+  light_temperature: '0-1(warm→cool)', light_mode: 'string',
+  target_temperature: 'num(°C)',
+  measure_temperature: 'ro', measure_humidity: 'ro',
+  measure_power: 'ro', measure_battery: 'ro',
+  volume_set: '0.0-1.0', volume_mute: 'bool',
+  speaker_playing: 'bool', speaker_next: 'cmd', speaker_prev: 'cmd',
+  locked: 'bool', windowcoverings_set: '0.0-1.0',
+  alarm_motion: 'ro', alarm_contact: 'ro',
+};
+
+function getCapHint(capKey) {
+  return CAP_TYPE_HINTS[capKey] || '';
+}
+
+/**
+ * Returns effective { expose, control } for a device.
+ * Default (no saved config) is { expose: true, control: true }.
+ */
+function getDevicePermission(deviceId, permissionsMap) {
+  if (!permissionsMap || !permissionsMap[deviceId]) {
+    return { expose: true, control: true };
+  }
+  const p = permissionsMap[deviceId];
+  const expose  = p.expose  !== false;
+  const control = expose && (p.control !== false);
+  return { expose, control };
+}
+
 class MistralApp extends Homey.App {
   async onInit() {
     this.log('Mistral AI App initialized');
 
     this.conversations = {};
+    this.scheduledTasks = {};
+    this._discoveredActionTitles = [];
+    this._discoveredActions = [];
+
 
     try {
       this.homeyApi = await HomeyAPI.createAppAPI({ homey: this.homey });
@@ -33,6 +69,9 @@ class MistralApp extends Homey.App {
     } catch (err) {
       this.error('Failed to instantiate Homey API', err);
     }
+
+    // --- Restore Scheduled Tasks from previous session ---
+    this._restoreScheduledTasks();
 
 
     // --- Flow Action: Ask Mistral ---
@@ -325,10 +364,10 @@ class MistralApp extends Homey.App {
 
       const parsedTokens = parseInt(max_tokens, 10);
       const resolvedMaxTokens = Number.isFinite(parsedTokens)
-        ? Math.min(Math.max(parsedTokens, 1), 1024)
+        ? Math.min(Math.max(parsedTokens, 1), 2048)
         : 400;
 
-      // Build device context with zones and current states
+      // Fetch devices and zones
       let allDevices = {};
       let allZones = {};
       if (this.homeyApi && this.homeyApi.devices) {
@@ -338,35 +377,74 @@ class MistralApp extends Homey.App {
         throw new Error('Homey Web API is not initialized. Check if homey:manager:api permission is granted.');
       }
 
-      // Build compact device lines: "- Name [Zone] caps: onoff=true, dim=0.8"
-      const deviceLines = Object.values(allDevices).map(device => {
+      // Load device permissions from settings
+      let permissionsMap = {};
+      try {
+        const raw = this.homey.settings.get('device_permissions');
+        if (raw) permissionsMap = JSON.parse(raw);
+      } catch (e) {
+        this.error('[control_devices_prompt] Failed to parse device_permissions setting, using defaults.');
+      }
+
+      // Filter to exposed devices only
+      const exposedDevices = Object.values(allDevices).filter(d => {
+        return getDevicePermission(d.id, permissionsMap).expose;
+      });
+
+      // Build compact device lines with IDs and capability type hints
+      const deviceLines = exposedDevices.map(device => {
         const zone = allZones[device.zone];
         const zoneName = zone ? zone.name : '?';
         const capsObj = device.capabilitiesObj || {};
         const capEntries = Object.entries(capsObj).map(([key, obj]) => {
           const val = obj.value;
-          if (val === null || val === undefined) return key;
-          return `${key}=${val}`;
+          const hint = getCapHint(key);
+          const hintStr = hint ? `[${hint}]` : '';
+          if (val === null || val === undefined) return `${key}${hintStr}`;
+          return `${key}${hintStr}=${val}`;
         });
-        return `- ${device.name} [${zoneName}]: ${capEntries.join(', ')}`;
+        return `- id:${device.id} | ${device.name} [${zoneName}]: ${capEntries.join(', ')}`;
       });
       const deviceContext = deviceLines.length > 0
         ? `Devices:\n${deviceLines.join('\n')}`
-        : 'No devices found.';
+        : 'No devices available.';
 
-      const systemPrompt = `You are a Homey smart home controller. You receive a device list with zones and current states, then a user command.
-Reply ONLY with valid JSON (no markdown):
-{"actions":[{"device":"<exact device name>","capability":"<cap>","value":<val>}],"explanation":"<short summary in user language>"}
+      // Discover registered custom action titles from flows
+      await this._discoverCustomActionTitles();
+      const discoveredActions = this._discoveredActions || [];
+      const currentTime = new Date().toISOString();
+
+      let customActionsSection = '';
+      if (discoveredActions.length > 0) {
+        const actionLines = discoveredActions.map(a =>
+          a.description ? `  - "${a.title}": ${a.description}` : `  - "${a.title}"`
+        ).join('\n');
+        customActionsSection = `\nCUSTOM ACTIONS:\n- The following custom Homey flow actions are available:\n${actionLines}\n- To trigger one, add "customActionTriggers": ["<exact title>"] to your JSON.\n- Match user requests to action names/descriptions when relevant.`;
+      }
+
+      const systemPrompt = `You are a Homey smart home controller. You receive a device list with IDs, zones, current states and capability types, then a user command.
+Current time: ${currentTime}
+Reply ONLY with valid JSON (no markdown, no explanation outside JSON):
+{"actions":[...],"scheduledActions":[{"delayMinutes":<1-1920>,"actions":[...],"description":"<desc>"}],"customActionTriggers":["<title>"],"explanation":"<short summary in user language>"}
 Rules:
-- Use exact device names from the list.
-- Use only listed capabilities.
-- Zones help identify devices (e.g. "living room light" → device in zone "Living Room").
+- MUST RETURN VALID JSON. Replace any newlines in your explanation with \\\\n. Do NOT use actual line breaks inside string values.
+- Prefer matching by deviceId (exact). Fall back to exact name, then partial name match.
+- Use only listed capabilities. Do NOT set capabilities marked [ro] (read-only).
+- Capability hints: bool=true/false, 0.0-1.0=float, num(°C)=number, cmd=true to trigger.
 - onoff: true/false. dim: 0.0-1.0. target_temperature: number. volume_set: 0.0-1.0.
-- If no match, return empty actions and explain.
+- Zones help identify devices by location (e.g. "living room light" → zone "Living Room").
+- If nothing matches or no action needed, return empty actions array and explain.
+- Only include scheduledActions or customActionTriggers when needed; omit otherwise.
+SCHEDULING:
+- You can schedule device actions for later (max 32 hours = 1920 minutes from now).
+- If the user says "in X minutes/hours" or "at HH:MM", use scheduledActions.
+- delayMinutes: integer 1-1920. Convert time to minutes from now.
+- Scheduled and immediate actions can coexist in the same response.${customActionsSection}
 
 ${deviceContext}`;
 
       const convId = conversation_id && conversation_id.trim() ? conversation_id.trim() : null;
+
       const history = convId ? (this.conversations[convId] || []) : [];
 
       const body = {
@@ -377,7 +455,8 @@ ${deviceContext}`;
           { role: 'user', content: prompt.trim() }
         ],
         max_tokens: resolvedMaxTokens,
-        temperature: 0.1
+        temperature: 0.1,
+        response_format: { type: "json_object" }
       };
 
       const responseData = await this.fetchMistral(body);
@@ -394,7 +473,7 @@ ${deviceContext}`;
       try {
         parsed = JSON.parse(jsonText);
       } catch (e) {
-        this.error(`Failed to parse Mistral response as JSON: ${rawText}`);
+        this.error(`[control_devices_prompt] Failed to parse JSON: ${rawText}`);
         throw new Error(`Mistral AI did not return valid JSON. Response: ${rawText.substring(0, 120)}`);
       }
 
@@ -410,26 +489,51 @@ ${deviceContext}`;
         }
       }
 
+      // Build lookup maps for fast matching
+      const deviceById = Object.fromEntries(exposedDevices.map(d => [d.id, d]));
+      const deviceByName = {};
+      for (const d of exposedDevices) {
+        deviceByName[d.name.toLowerCase()] = d;
+      }
+
       let devicesControlled = 0;
+      let failedActions = 0;
       const executedActions = [];
 
       for (const action of actions) {
-        const targetName = (action.device || '').toLowerCase();
+        const targetId   = (action.deviceId || '').trim();
+        const targetName = (action.device   || '').toLowerCase().trim();
         const capability = action.capability;
-        const value = action.value;
+        const value      = action.value;
 
-        const matchedDevice = Object.values(allDevices).find(d => {
-          const name = d.name.toLowerCase();
-          return name === targetName || name.includes(targetName) || targetName.includes(name);
-        });
+        // Match by deviceId first, then exact name, then partial name
+        let matchedDevice = deviceById[targetId] || null;
+        if (!matchedDevice && targetName) {
+          matchedDevice = deviceByName[targetName] || null;
+          if (!matchedDevice) {
+            matchedDevice = exposedDevices.find(d => {
+              const n = d.name.toLowerCase();
+              return n.includes(targetName) || targetName.includes(n);
+            }) || null;
+          }
+        }
 
         if (!matchedDevice) {
-          this.log(`[control_devices_prompt] No device matched for: "${action.device}"`);
+          this.log(`[control_devices_prompt] No device matched for id="${targetId}" name="${action.device}"`);
+          failedActions++;
+          continue;
+        }
+
+        // Check control permission
+        if (!getDevicePermission(matchedDevice.id, permissionsMap).control) {
+          this.log(`[control_devices_prompt] Device "${matchedDevice.name}" is not permitted for control.`);
+          failedActions++;
           continue;
         }
 
         if (!matchedDevice.capabilitiesObj || !matchedDevice.capabilitiesObj[capability]) {
           this.log(`[control_devices_prompt] Device "${matchedDevice.name}" has no capability: ${capability}`);
+          failedActions++;
           continue;
         }
 
@@ -438,21 +542,45 @@ ${deviceContext}`;
           this.log(`[control_devices_prompt] Set "${matchedDevice.name}" ${capability} = ${value}`);
           devicesControlled++;
           executedActions.push({
-            device: matchedDevice.name,
+            deviceId:   matchedDevice.id,
+            device:     matchedDevice.name,
             capability: capability,
-            value: value
+            value:      value
           });
         } catch (err) {
           this.error(`[control_devices_prompt] Failed to set "${matchedDevice.name}" ${capability}: ${err.message}`);
+          failedActions++;
         }
       }
 
-      this.log(`[control_devices_prompt] Controlled ${devicesControlled} device(s). Explanation: ${explanation}`);
+      this.log(`[control_devices_prompt] Controlled ${devicesControlled}, failed ${failedActions}. Explanation: ${explanation}`);
 
-      return { 
-        explanation, 
-        devices_controlled: devicesControlled, 
-        changes_json: JSON.stringify(executedActions) 
+      // --- Handle scheduled actions ---
+      const scheduledActions = Array.isArray(parsed.scheduledActions) ? parsed.scheduledActions : [];
+      for (const sched of scheduledActions) {
+        const delayMin = parseInt(sched.delayMinutes, 10);
+        if (!Number.isFinite(delayMin) || delayMin < 1 || delayMin > 1920) {
+          this.log('[control_devices_prompt] Invalid delayMinutes, skipping:', sched.delayMinutes);
+          continue;
+        }
+        const schedActions = Array.isArray(sched.actions) ? sched.actions : [];
+        const description = sched.description || '';
+        this._createScheduledTask(delayMin, schedActions, description, exposedDevices, permissionsMap);
+      }
+
+      // --- Handle custom action triggers ---
+      const customActionTriggers = Array.isArray(parsed.customActionTriggers) ? parsed.customActionTriggers : [];
+      for (const title of customActionTriggers) {
+        this.log(`[control_devices_prompt] Triggering custom action: "${title}"`);
+        this._customActionTriggerCard.trigger({ action_title: title }, { action_title: title })
+          .catch(err => this.error('[control_devices_prompt] Custom action trigger failed:', err.message));
+      }
+
+      return {
+        explanation,
+        devices_controlled: devicesControlled,
+        changes_json:       JSON.stringify(executedActions),
+        failed_actions:     failedActions
       };
     });
 
@@ -466,8 +594,152 @@ ${deviceContext}`;
       }
     });
 
+    // --- Flow Trigger: Custom Action Triggered ---
+    // action_title is now type:text — no autocomplete listener needed.
+    this._customActionTriggerCard = this.homey.flow.getTriggerCard('custom_action_triggered');
+    this._customActionTriggerCard.registerRunListener(async (args, state) => {
+      return args.action_title && state.action_title &&
+        args.action_title.trim().toLowerCase() === state.action_title.trim().toLowerCase();
+    });
 
     this.log('Flow cards registered');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Custom Action Discovery (Option B: read from flows via getArgumentValues)
+  // ---------------------------------------------------------------------------
+  async _discoverCustomActionTitles() {
+    try {
+      if (this._customActionTriggerCard && typeof this._customActionTriggerCard.getArgumentValues === 'function') {
+        const argValues = await this._customActionTriggerCard.getArgumentValues();
+        // Collect {title, description} pairs; deduplicate by title
+        const seen = new Set();
+        const actions = [];
+        for (const v of argValues) {
+          const title = (v && v.action_title && v.action_title.trim()) || '';
+          if (!title || seen.has(title.toLowerCase())) continue;
+          seen.add(title.toLowerCase());
+          const desc = (v && v.description && v.description.trim()) || '';
+          actions.push({ title, description: desc });
+        }
+        this._discoveredActionTitles = actions.map(a => a.title);
+        this._discoveredActions = actions; // full objects with description
+        this.log('[custom_actions] Discovered actions:', actions);
+      }
+    } catch (err) {
+      this.log('[custom_actions] Could not discover action titles:', err.message);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Scheduled Tasks
+  // ---------------------------------------------------------------------------
+  _persistTasks() {
+    const serializable = Object.values(this.scheduledTasks).map(t => ({
+      id: t.id, description: t.description,
+      createdAt: t.createdAt, executeAt: t.executeAt,
+      actions: t.actions, status: t.status
+    }));
+    this.homey.settings.set('scheduled_tasks', JSON.stringify(serializable));
+  }
+
+  _restoreScheduledTasks() {
+    try {
+      const raw = this.homey.settings.get('scheduled_tasks');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (!Array.isArray(saved)) return;
+      const now = Date.now();
+      for (const t of saved) {
+        const delayMs = new Date(t.executeAt).getTime() - now;
+        if (t.status !== 'pending' || delayMs <= 0) continue;
+        this.scheduledTasks[t.id] = { ...t, timer: null };
+        this.scheduledTasks[t.id].timer = this.homey.setTimeout(() => {
+          this._executeScheduledTask(t.id);
+        }, Math.min(delayMs, 115200000));
+        this.log(`[scheduler] Restored task "${t.description}" in ${Math.round(delayMs / 60000)} min`);
+      }
+    } catch (err) {
+      this.error('[scheduler] Failed to restore tasks:', err.message);
+    }
+  }
+
+  _createScheduledTask(delayMinutes, actions, description, exposedDevices, permissionsMap) {
+    const id = `task_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const now = Date.now();
+    const executeAt = new Date(now + delayMinutes * 60000).toISOString();
+    const task = {
+      id, description, actions, status: 'pending',
+      createdAt: new Date(now).toISOString(), executeAt,
+      exposedDeviceIds: exposedDevices.map(d => d.id),
+      permissionsMap
+    };
+    task.timer = this.homey.setTimeout(() => {
+      this._executeScheduledTask(id);
+    }, Math.min(delayMinutes * 60000, 115200000));
+    this.scheduledTasks[id] = task;
+    this._persistTasks();
+    this.log(`[scheduler] Created task "${description}" (${delayMinutes} min, id=${id})`);
+    return id;
+  }
+
+  async _executeScheduledTask(taskId) {
+    const task = this.scheduledTasks[taskId];
+    if (!task || task.status !== 'pending') return;
+    task.status = 'running';
+    this.log(`[scheduler] Executing task "${task.description}" (id=${taskId})`);
+    try {
+      let allDevices = {};
+      if (this.homeyApi && this.homeyApi.devices) {
+        allDevices = await this.homeyApi.devices.getDevices();
+      }
+      const deviceById = Object.fromEntries(Object.values(allDevices).map(d => [d.id, d]));
+      const deviceByName = {};
+      for (const d of Object.values(allDevices)) deviceByName[d.name.toLowerCase()] = d;
+
+      for (const action of task.actions) {
+        const targetId   = (action.deviceId || '').trim();
+        const targetName = (action.device   || '').toLowerCase().trim();
+        const capability = action.capability;
+        const value      = action.value;
+        let dev = deviceById[targetId] || deviceByName[targetName] || null;
+        if (!dev && targetName) {
+          dev = Object.values(allDevices).find(d => {
+            const n = d.name.toLowerCase();
+            return n.includes(targetName) || targetName.includes(n);
+          }) || null;
+        }
+        if (!dev) { this.log(`[scheduler] No device for "${targetId || targetName}"`); continue; }
+        if (!getDevicePermission(dev.id, task.permissionsMap).control) { continue; }
+        await this.homeyApi.devices.setCapabilityValue({ deviceId: dev.id, capabilityId: capability, value }).catch(err => {
+          this.error(`[scheduler] Failed ${dev.name} ${capability}:`, err.message);
+        });
+        this.log(`[scheduler] Set "${dev.name}" ${capability} = ${value}`);
+      }
+      task.status = 'done';
+    } catch (err) {
+      task.status = 'failed';
+      this.error('[scheduler] Task execution error:', err.message);
+    } finally {
+      this._persistTasks();
+    }
+  }
+
+  getScheduledTasks() {
+    return Object.values(this.scheduledTasks).map(t => ({
+      id: t.id, description: t.description,
+      createdAt: t.createdAt, executeAt: t.executeAt,
+      status: t.status
+    }));
+  }
+
+  cancelScheduledTask(taskId) {
+    const task = this.scheduledTasks[taskId];
+    if (!task) throw new Error(`Task ${taskId} not found`);
+    if (task.timer) this.homey.clearTimeout(task.timer);
+    delete this.scheduledTasks[taskId];
+    this._persistTasks();
+    this.log(`[scheduler] Cancelled task ${taskId}`);
   }
 
   async fetchMistral(body) {

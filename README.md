@@ -6,7 +6,7 @@ Homey app to use Mistral AI models in Homey flows
 ## 💡 FEATURES
 
 ### Ask Mistral (Flow Action)
-Send any prompt to Mistral AI and receive a text response as a Flow Token. You can use this token in any subsequent 'Then' card (e.g., to send a push notification or set a variable).
+Send any prompt to Mistral AI and receive a text response as a Flow Token. You can use this token in any subsequent 'Then' card (e.g., to send a push notification or set a variable). It is also possible to select wich devices are exposed or controllable by the AI.
 
 ### Mistral AI Responded (Flow Trigger)
 Trigger a flow whenever a responses is received. This card provides both the 'Prompt' and the 'Response' as tokens, perfect for logging or chain reactions.
@@ -28,7 +28,7 @@ Fine-tune each request directly in the Flow card:
 - Mistral provide generous free API rates using experiments
 - Model performance and response times depend on the selected Mistral model.
 - Requires an active internet connection on your Homey Pro.
-- Make sure to keep your API key secure; it is stored locally on your Homey Pro.
+- the ask home card may lead to unexpected results, use it at your own ris,k and manage the exposed devices
 
 ## Changelog
 
@@ -37,4 +37,5 @@ Fine-tune each request directly in the Flow card:
 | 0.0.1 | 2026-03-22 | Fisrst beta version|
 | 0.0.2 | 2026-04-10 | Added device control feature|
 | 0.0.3 | 2026-04-11 | Added conversation feature|
+| 1.1.0 | 2026-04-19 | Added schedulded tasks, devices selection and flow control card|
 

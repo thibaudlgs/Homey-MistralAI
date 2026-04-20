@@ -1,6 +1,6 @@
 {
   "id": "com.mistral.ai",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "sdk": 3,
   "runtime": "nodejs",
   "compatibility": ">=5.0.0",
@@ -44,6 +44,28 @@
   "permissions": [
     "homey:manager:api"
   ],
+  "api": {
+    "getZones": {
+      "method": "GET",
+      "path": "/zones",
+      "public": true
+    },
+    "getDevices": {
+      "method": "GET",
+      "path": "/devices",
+      "public": true
+    },
+    "getTasks": {
+      "method": "GET",
+      "path": "/tasks",
+      "public": true
+    },
+    "deleteTask": {
+      "method": "DELETE",
+      "path": "/tasks/:id",
+      "public": true
+    }
+  },
   "images": {
     "large": "assets/images/large.jpg",
     "small": "assets/images/small.jpg"

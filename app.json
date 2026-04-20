@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.mistral.ai",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "sdk": 3,
   "runtime": "nodejs",
   "compatibility": ">=5.0.0",
@@ -45,6 +45,28 @@
   "permissions": [
     "homey:manager:api"
   ],
+  "api": {
+    "getZones": {
+      "method": "GET",
+      "path": "/zones",
+      "public": true
+    },
+    "getDevices": {
+      "method": "GET",
+      "path": "/devices",
+      "public": true
+    },
+    "getTasks": {
+      "method": "GET",
+      "path": "/tasks",
+      "public": true
+    },
+    "deleteTask": {
+      "method": "DELETE",
+      "path": "/tasks/:id",
+      "public": true
+    }
+  },
   "images": {
     "large": "assets/images/large.jpg",
     "small": "assets/images/small.jpg"
@@ -52,6 +74,136 @@
   "brandColor": "#FD6520",
   "flow": {
     "triggers": [
+      {
+        "title": {
+          "en": "A custom action is triggered",
+          "fr": "Une action personnalisée est déclenchée",
+          "nl": "Een aangepaste actie wordt geactiveerd",
+          "de": "Eine benutzerdefinierte Aktion wird ausgelöst",
+          "it": "Un'azione personalizzata viene attivata",
+          "sv": "En anpassad åtgärd utlöses",
+          "no": "En tilpasset handling utløses",
+          "es": "Se activa una acción personalizada",
+          "da": "En brugerdefineret handling udløses",
+          "ru": "Срабатывает пользовательское действие",
+          "pl": "Akcja niestandardowa zostaje wywołana",
+          "ko": "사용자 지정 동작이 실행됨",
+          "ar": "يتم تشغيل إجراء مخصص"
+        },
+        "titleFormatted": {
+          "en": "Custom action \"[[action_title]]\" is triggered (desc: [[description]])",
+          "fr": "L'action personnalisée \"[[action_title]]\" est déclenchée (desc: [[description]])",
+          "nl": "Aangepaste actie \"[[action_title]]\" wordt geactiveerd (omschr: [[description]])",
+          "de": "Benutzerdefinierte Aktion \"[[action_title]]\" wird ausgelöst (Beschr.: [[description]])",
+          "it": "L'azione personalizzata \"[[action_title]]\" viene attivata (desc: [[description]])",
+          "sv": "Anpassad åtgärd \"[[action_title]]\" utlöses (beskr: [[description]])",
+          "no": "Tilpasset handling \"[[action_title]]\" utløses (beskr: [[description]])",
+          "es": "La acción personalizada \"[[action_title]]\" se activa (desc: [[description]])",
+          "da": "Brugerdefineret handling \"[[action_title]]\" udløses (beskr.: [[description]])",
+          "ru": "Пользовательское действие \"[[action_title]]\" срабатывает (опис.: [[description]])",
+          "pl": "Akcja niestandardowa \"[[action_title]]\" zostaje wywołana (opis: [[description]])",
+          "ko": "사용자 지정 동작 \"[[action_title]]\" 실행됨 (설명: [[description]])",
+          "ar": "يتم تشغيل الإجراء المخصص \"[[action_title]]\" (الوصف: [[description]])"
+        },
+        "hint": {
+          "en": "Triggers when the AI recognises this action by its title in the 'Control devices with prompt' card. Give a short, clear title (e.g. 'Movie mode', 'Night alarm'). The optional description helps the AI understand when to use it.",
+          "fr": "Se déclenche lorsque l'IA reconnaît cette action par son titre dans la carte 'Contrôler des appareils avec un prompt'. Donnez un titre court et clair (ex: 'Mode cinéma', 'Alarme nuit'). La description optionnelle aide l'IA à comprendre quand l'utiliser."
+        },
+        "args": [
+          {
+            "name": "action_title",
+            "type": "text",
+            "title": {
+              "en": "Action title",
+              "fr": "Titre de l'action",
+              "nl": "Actietitel",
+              "de": "Aktionstitel",
+              "it": "Titolo dell'azione",
+              "sv": "Åtgärdstitel",
+              "no": "Handlingstittel",
+              "es": "Título de la acción",
+              "da": "Handlingstitel",
+              "ru": "Название действия",
+              "pl": "Tytuł akcji",
+              "ko": "동작 제목",
+              "ar": "عنوان الإجراء"
+            },
+            "placeholder": {
+              "en": "e.g. Movie mode",
+              "fr": "ex: Mode cinéma",
+              "nl": "bv. Filmstand",
+              "de": "z.B. Filmmodus",
+              "it": "es. Modalità cinema",
+              "sv": "t.ex. Filmläge",
+              "no": "f.eks. Filmsmodus",
+              "es": "p.ej. Modo cine",
+              "da": "f.eks. Filmtilstand",
+              "ru": "напр. Режим кино",
+              "pl": "np. Tryb kino",
+              "ko": "예: 영화 모드",
+              "ar": "مثال: وضع السينما"
+            }
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "required": false,
+            "title": {
+              "en": "Description (optional, helps the AI)",
+              "fr": "Description (optionnelle, aide l'IA)",
+              "nl": "Beschrijving (optioneel, helpt de AI)",
+              "de": "Beschreibung (optional, hilft der KI)",
+              "it": "Descrizione (opzionale, aiuta l'AI)",
+              "sv": "Beskrivning (valfri, hjälper AI:n)",
+              "no": "Beskrivelse (valgfri, hjelper AI-en)",
+              "es": "Descripción (opcional, ayuda a la IA)",
+              "da": "Beskrivelse (valgfri, hjælper AI'en)",
+              "ru": "Описание (необязательно, помогает ИИ)",
+              "pl": "Opis (opcjonalny, pomaga AI)",
+              "ko": "설명 (선택, AI에 도움)",
+              "ar": "الوصف (اختياري، يساعد الذكاء الاصطناعي)"
+            },
+            "placeholder": {
+              "en": "e.g. Dims all lights and turns on the TV",
+              "fr": "ex: Baisse toutes les lumières et allume la TV",
+              "nl": "bv. Dimt alle lichten en zet de TV aan",
+              "de": "z.B. Dimmt alle Lichter und schaltet den TV ein",
+              "it": "es. Abbassa le luci e accende la TV",
+              "sv": "t.ex. Dimmar alla lampor och sätter på TV:n",
+              "no": "f.eks. Dimmer alle lys og slår på TV-en",
+              "es": "p.ej. Atenúa todas las luces y enciende la TV",
+              "da": "f.eks. Dæmper alle lys og tænder TV'et",
+              "ru": "напр. Приглушает свет и включает телевизор",
+              "pl": "np. Ściemnia wszystkie światła i włącza TV",
+              "ko": "예: 모든 조명을 어둡게 하고 TV를 켭니다",
+              "ar": "مثال: يخفض جميع الأضواء ويشغل التلفاز"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "action_title",
+            "type": "string",
+            "title": {
+              "en": "Action title",
+              "fr": "Titre de l'action",
+              "nl": "Actietitel",
+              "de": "Aktionstitel",
+              "it": "Titolo dell'azione",
+              "sv": "Åtgärdstitel",
+              "no": "Handlingstittel",
+              "es": "Título de la acción",
+              "da": "Handlingstitel",
+              "ru": "Название действия",
+              "pl": "Tytuł akcji",
+              "ko": "동작 제목",
+              "ar": "عنوان الإجراء"
+            },
+            "example": "Movie mode"
+          }
+        ],
+        "id": "custom_action_triggered"
+      },
       {
         "title": {
           "en": "Mistral Agent responded",
@@ -709,7 +861,7 @@
               "en": "400"
             },
             "min": 1,
-            "max": 1024
+            "max": 2048
           },
           {
             "name": "conversation_id",
@@ -784,7 +936,27 @@
               "ko": "변경 메타데이터 JSON",
               "ar": "تغيير البيانات الوصفية JSON"
             },
-            "example": "[{\"device\":\"Light\",\"capability\":\"onoff\",\"value\":true}]"
+            "example": "[{\"deviceId\":\"abc\",\"device\":\"Light\",\"capability\":\"onoff\",\"value\":true}]"
+          },
+          {
+            "name": "failed_actions",
+            "type": "number",
+            "title": {
+              "en": "Failed actions",
+              "nl": "Mislukte acties",
+              "de": "Fehlgeschlagene Aktionen",
+              "fr": "Actions échouées",
+              "it": "Azioni fallite",
+              "sv": "Misslyckade åtgärder",
+              "no": "Mislykkede handlinger",
+              "es": "Acciones fallidas",
+              "da": "Mislykkede handlinger",
+              "ru": "Неудачные действия",
+              "pl": "Nieudane akcje",
+              "ko": "실패한 동작 수",
+              "ar": "الإجراءات الفاشلة"
+            },
+            "example": 0
           }
         ],
         "id": "control_devices_prompt"

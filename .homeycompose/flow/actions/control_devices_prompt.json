@@ -90,7 +90,7 @@
         "en": "400"
       },
       "min": 1,
-      "max": 1024
+      "max": 2048
     },
     {
       "name": "conversation_id",
@@ -165,7 +165,27 @@
         "ko": "변경 메타데이터 JSON",
         "ar": "تغيير البيانات الوصفية JSON"
       },
-      "example": "[{\"device\":\"Light\",\"capability\":\"onoff\",\"value\":true}]"
+      "example": "[{\"deviceId\":\"abc\",\"device\":\"Light\",\"capability\":\"onoff\",\"value\":true}]"
+    },
+    {
+      "name": "failed_actions",
+      "type": "number",
+      "title": {
+        "en": "Failed actions",
+        "nl": "Mislukte acties",
+        "de": "Fehlgeschlagene Aktionen",
+        "fr": "Actions échouées",
+        "it": "Azioni fallite",
+        "sv": "Misslyckade åtgärder",
+        "no": "Mislykkede handlinger",
+        "es": "Acciones fallidas",
+        "da": "Mislykkede handlinger",
+        "ru": "Неудачные действия",
+        "pl": "Nieudane akcje",
+        "ko": "실패한 동작 수",
+        "ar": "الإجراءات الفاشلة"
+      },
+      "example": 0
     }
   ]
 }
