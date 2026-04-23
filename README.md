@@ -38,4 +38,4 @@ Fine-tune each request directly in the Flow card:
 | 0.0.2 | 2026-04-10 | Added device control feature|
 | 0.0.3 | 2026-04-11 | Added conversation feature|
 | 1.1.0 | 2026-04-19 | Added schedulded tasks, devices selection and flow control card|
-
+| 1.1.1 | 2026-04-23 | Added links to Homey community forum and to source code|

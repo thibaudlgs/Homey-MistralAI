@@ -1,5 +1,11 @@
 {
   "1.0.0": {
     "en": "Intitial release"
+  },
+  "1.1.0": {
+    "en": "Added schedulded tasks, devices selection and flow control card"
+  },
+  "1.1.1": {
+    "en": "Added links to Homey community forum and to source code"
   }
 }
