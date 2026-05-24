@@ -65,6 +65,11 @@
       "method": "DELETE",
       "path": "/tasks/:id",
       "public": true
+    },
+    "getCustomActions": {
+      "method": "GET",
+      "path": "/custom-actions",
+      "public": true
     }
   },
   "images": {
@@ -200,6 +205,26 @@
               "ar": "عنوان الإجراء"
             },
             "example": "Movie mode"
+          },
+          {
+            "name": "ai_message",
+            "type": "string",
+            "title": {
+              "en": "AI message",
+              "fr": "Message de l'IA",
+              "nl": "AI-bericht",
+              "de": "KI-Nachricht",
+              "it": "Messaggio AI",
+              "sv": "AI-meddelande",
+              "no": "AI-melding",
+              "es": "Mensaje de la IA",
+              "da": "AI-besked",
+              "ru": "Сообщение ИИ",
+              "pl": "Wiadomość AI",
+              "ko": "AI 메시지",
+              "ar": "رسالة الذكاء الاصطناعي"
+            },
+            "example": "Activating movie mode: dimming lights and turning on the TV."
           }
         ],
         "id": "custom_action_triggered"
@@ -263,6 +288,66 @@
           }
         ],
         "id": "mistral_agent_responded"
+      },
+      {
+        "title": {
+          "en": "Mistral Agent (Vision) responded",
+          "nl": "Mistral Agent (Vision) heeft geantwoord",
+          "de": "Mistral Agent (Vision) hat geantwortet",
+          "fr": "L'agent Mistral (Vision) a répondu",
+          "it": "L'agente Mistral (Vision) ha risposto",
+          "sv": "Mistral Agent (Vision) svarade",
+          "no": "Mistral Agent (Vision) har svart",
+          "es": "Mistral Agent (Vision) ha respondido",
+          "da": "Mistral Agent (Vision) svarede",
+          "ru": "Mistral Agent (Vision) ответил",
+          "pl": "Mistral Agent (Vision) odpowiedział",
+          "ko": "Mistral Agent (Vision) 응답함",
+          "ar": "رد وكيل Mistral (الرؤية)"
+        },
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            },
+            "example": "This is an image of a cat."
+          },
+          {
+            "name": "prompt",
+            "type": "string",
+            "title": {
+              "en": "Prompt",
+              "nl": "Prompt",
+              "de": "Prompt",
+              "fr": "Invite",
+              "it": "Prompt",
+              "sv": "Prompt",
+              "no": "Prompt",
+              "es": "Prompt",
+              "da": "Prompt",
+              "ru": "Запрос",
+              "pl": "Prompt",
+              "ko": "프롬프트",
+              "ar": "مطالبة"
+            },
+            "example": "What is in this image?"
+          }
+        ],
+        "id": "mistral_agent_vision_responded"
       },
       {
         "title": {
@@ -386,6 +471,71 @@
       }
     ],
     "actions": [
+      {
+        "title": {
+          "en": "Add to conversation",
+          "fr": "Ajouter à la conversation"
+        },
+        "titleFormatted": {
+          "en": "Add to conversation in [[conversation_id]] as [[role]]: [[message]]",
+          "fr": "Ajouter à la conversation en [[conversation_id]] en tant que [[role]] : [[message]]"
+        },
+        "hint": {
+          "en": "Add a message to the conversation history without generating a response.",
+          "fr": "Ajoute un message à l'historique de la conversation sans générer de réponse."
+        },
+        "args": [
+          {
+            "name": "conversation_id",
+            "type": "text",
+            "title": {
+              "en": "Conversation ID",
+              "fr": "ID de conversation"
+            },
+            "placeholder": {
+              "en": "e.g. chat_living_room",
+              "fr": "ex: chat_salon"
+            }
+          },
+          {
+            "name": "role",
+            "type": "dropdown",
+            "title": {
+              "en": "As",
+              "fr": "En tant que"
+            },
+            "values": [
+              {
+                "id": "user",
+                "label": {
+                  "en": "User",
+                  "fr": "Utilisateur"
+                }
+              },
+              {
+                "id": "assistant",
+                "label": {
+                  "en": "Chatbot",
+                  "fr": "Chatbot"
+                }
+              }
+            ]
+          },
+          {
+            "name": "message",
+            "type": "text",
+            "title": {
+              "en": "Message",
+              "fr": "Message"
+            },
+            "placeholder": {
+              "en": "Message to add...",
+              "fr": "Message à ajouter..."
+            }
+          }
+        ],
+        "id": "add_to_conversation"
+      },
       {
         "title": {
           "en": "Ask Mistral",
@@ -649,6 +799,93 @@
           }
         ],
         "id": "ask_mistral_agent"
+      },
+      {
+        "title": {
+          "en": "Ask Mistral Agent (Vision)",
+          "nl": "Vraag Mistral Agent (Vision)",
+          "de": "Mistral Agent fragen (Vision)",
+          "fr": "Demander à l'agent Mistral (Vision)",
+          "it": "Chiedi all'agente Mistral (Vision)",
+          "sv": "Fråga Mistral Agent (Vision)",
+          "no": "Spør Mistral Agent (Vision)",
+          "es": "Preguntar al Agente Mistral (Vision)",
+          "da": "Spørg Mistral Agent (Vision)",
+          "ru": "Спросить Mistral Agent (Vision)",
+          "pl": "Zapytaj Mistral Agent (Vision)",
+          "ko": "Mistral Agent에게 질문하기 (비전)",
+          "ar": "اسأل وكيل Mistral (الرؤية)"
+        },
+        "titleFormatted": {
+          "en": "Ask Mistral Agent: [[prompt]] about image [[droptoken]] using Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])"
+        },
+        "hint": {
+          "en": "Send a prompt with an image to a custom Mistral AI Agent.",
+          "fr": "Envoyez une invite avec une image à un agent Mistral AI personnalisé."
+        },
+        "droptoken": "image",
+        "args": [
+          {
+            "name": "prompt",
+            "type": "text",
+            "placeholder": {
+              "en": "Describe this image...",
+              "fr": "Décrivez cette image..."
+            }
+          },
+          {
+            "name": "agent_id",
+            "type": "text",
+            "placeholder": {
+              "en": "ag_...",
+              "fr": "ag_..."
+            }
+          },
+          {
+            "name": "max_tokens",
+            "type": "number",
+            "placeholder": {
+              "en": "800"
+            },
+            "min": 1,
+            "max": 8192
+          },
+          {
+            "name": "conversation_id",
+            "type": "text",
+            "title": {
+              "en": "Conversation ID (optional)",
+              "fr": "ID de conversation (optionnel)"
+            },
+            "placeholder": {
+              "en": "Leave empty for single-use",
+              "fr": "Laisser vide pour usage unique"
+            },
+            "required": false
+          }
+        ],
+        "tokens": [
+          {
+            "name": "response",
+            "type": "string",
+            "title": {
+              "en": "Response",
+              "nl": "Reactie",
+              "de": "Antwort",
+              "fr": "Réponse",
+              "it": "Risposta",
+              "sv": "Svar",
+              "no": "Svar",
+              "es": "Respuesta",
+              "da": "Svar",
+              "ru": "Ответ",
+              "pl": "Odpowiedź",
+              "ko": "응답",
+              "ar": "الرد"
+            }
+          }
+        ],
+        "id": "ask_mistral_agent_vision"
       },
       {
         "title": {

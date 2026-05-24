@@ -1,0 +1,64 @@
+{
+  "title": {
+    "en": "Add to conversation",
+    "fr": "Ajouter à la conversation"
+  },
+  "titleFormatted": {
+    "en": "Add to conversation in [[conversation_id]] as [[role]]: [[message]]",
+    "fr": "Ajouter à la conversation en [[conversation_id]] en tant que [[role]] : [[message]]"
+  },
+  "hint": {
+    "en": "Add a message to the conversation history without generating a response.",
+    "fr": "Ajoute un message à l'historique de la conversation sans générer de réponse."
+  },
+  "args": [
+    {
+      "name": "conversation_id",
+      "type": "text",
+      "title": {
+        "en": "Conversation ID",
+        "fr": "ID de conversation"
+      },
+      "placeholder": {
+        "en": "e.g. chat_living_room",
+        "fr": "ex: chat_salon"
+      }
+    },
+    {
+      "name": "role",
+      "type": "dropdown",
+      "title": {
+        "en": "As",
+        "fr": "En tant que"
+      },
+      "values": [
+        {
+          "id": "user",
+          "label": {
+            "en": "User",
+            "fr": "Utilisateur"
+          }
+        },
+        {
+          "id": "assistant",
+          "label": {
+            "en": "Chatbot",
+            "fr": "Chatbot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "message",
+      "type": "text",
+      "title": {
+        "en": "Message",
+        "fr": "Message"
+      },
+      "placeholder": {
+        "en": "Message to add...",
+        "fr": "Message à ajouter..."
+      }
+    }
+  ]
+}

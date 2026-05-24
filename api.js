@@ -19,6 +19,11 @@ module.exports = {
     return homey.app.getScheduledTasks();
   },
 
+  async getCustomActions({ homey }) {
+    await homey.app._discoverCustomActionTitles();
+    return homey.app._discoveredActions || [];
+  },
+
   async deleteTask({ homey, params }) {
     const taskId = params.id;
     if (!taskId) throw new Error('Task ID is required.');

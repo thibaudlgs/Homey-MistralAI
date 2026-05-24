@@ -23,6 +23,11 @@
         border: 1px solid #ccc;
         border-radius: 4px;
       }
+      input[type="password"],
+      select {
+        width: 100%;
+        box-sizing: border-box;
+      }
       button {
         background-color: #FD6520;
         color: white;
@@ -117,6 +122,42 @@
       }
       .task-delete:hover { background: #fdd; }
       #tasks-empty { font-size: 0.85em; color: #999; }
+      /* -------- Custom Actions -------- */
+      .action-row {
+        display: flex;
+        align-items: flex-start;
+        padding: 8px 4px;
+        border-bottom: 1px solid #f0f0f0;
+        gap: 10px;
+        font-size: 0.87em;
+      }
+      .action-row:last-child { border-bottom: none; }
+      .action-badge {
+        background: #FD6520;
+        color: #fff;
+        border-radius: 12px;
+        padding: 2px 10px;
+        font-size: 0.78em;
+        font-weight: 700;
+        white-space: nowrap;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .action-info { display: flex; flex-direction: column; gap: 2px; }
+      .action-title-text { font-weight: 600; color: #222; }
+      .action-desc-text { color: #777; font-size: 0.88em; }
+      #actions-empty { font-size: 0.85em; color: #999; }
+      .refresh-btn {
+        background: none;
+        border: 1px solid #ddd;
+        color: #555;
+        padding: 4px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8em;
+        font-weight: 600;
+      }
+      .refresh-btn:hover { background: #f5f5f5; }
     </style>
   </head>
   <body>
@@ -153,6 +194,18 @@
     </p>
     <div id="tasks-list">
       <div id="tasks-loading" style="font-size:0.85em;color:#999;">Loading tasks...</div>
+    </div>
+
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>Custom Actions</span>
+      <button class="refresh-btn" id="refresh-actions" title="Refresh">&#8635; Refresh</button>
+    </div>
+    <p class="section-desc">
+      Actions registered in your flows using the <strong>"A custom action is triggered"</strong> card.
+      The AI will recognise these by title and can trigger them from "Control devices with prompt".
+    </p>
+    <div id="actions-list">
+      <div id="actions-loading" style="font-size:0.85em;color:#999;">Loading actions...</div>
     </div>
 
 
@@ -323,6 +376,8 @@
         }
         // -------- End Device Permissions --------
 
+
+
         saveEl.addEventListener('click', function() {
           Homey.set('api_key', apiKeyEl.value, function(err) {
             if (err) {
@@ -336,11 +391,12 @@
                 statusEl.style.color = 'red';
                 return;
               }
+              
               var permsJson = (devicesCache.length > 0) ? JSON.stringify(permissionsMap) : null;
               if (permsJson === null) {
-                statusEl.innerText = 'Settings saved! (Device permissions unchanged — devices failed to load)';
+                statusEl.innerText = 'Settings saved!';
                 statusEl.style.color = 'green';
-                setTimeout(function() { statusEl.innerText = ''; }, 4000);
+                setTimeout(function() { statusEl.innerText = ''; }, 3000);
                 return;
               }
               Homey.set('device_permissions', permsJson, function(err3) {
@@ -431,6 +487,63 @@
         // Auto-refresh tasks every 30s
         setInterval(loadTasks, 30000);
         // -------- End Scheduled Tasks --------
+
+        // -------- Custom Actions --------
+        var actionsList = document.getElementById('actions-list');
+
+        function renderCustomActions(actions) {
+          actionsList.innerHTML = '';
+          if (!actions || actions.length === 0) {
+            var empty = document.createElement('p');
+            empty.id = 'actions-empty';
+            empty.innerText = 'No custom actions found. Create flows using the "A custom action is triggered" card.';
+            actionsList.appendChild(empty);
+            return;
+          }
+          actions.forEach(function(a) {
+            var row = document.createElement('div');
+            row.className = 'action-row';
+
+            var badge = document.createElement('span');
+            badge.className = 'action-badge';
+            badge.innerText = '⚡ Action';
+            row.appendChild(badge);
+
+            var info = document.createElement('div');
+            info.className = 'action-info';
+
+            var titleEl = document.createElement('span');
+            titleEl.className = 'action-title-text';
+            titleEl.innerText = a.title || '(no title)';
+            info.appendChild(titleEl);
+
+            if (a.description) {
+              var descEl = document.createElement('span');
+              descEl.className = 'action-desc-text';
+              descEl.innerText = a.description;
+              info.appendChild(descEl);
+            }
+
+            row.appendChild(info);
+            actionsList.appendChild(row);
+          });
+        }
+
+        function loadCustomActions() {
+          actionsList.innerHTML = '<div style="font-size:0.85em;color:#999;">Loading actions...</div>';
+          Homey.api('GET', '/custom-actions', function(err, actions) {
+            if (err) {
+              actionsList.innerHTML = '<p style="color:#c00;font-size:0.85em;">Failed to load actions: ' + (err.message || err) + '</p>';
+              return;
+            }
+            renderCustomActions(actions);
+          });
+        }
+
+        document.getElementById('refresh-actions').addEventListener('click', loadCustomActions);
+
+        loadCustomActions();
+        // -------- End Custom Actions --------
       }
     </script>
   </body>

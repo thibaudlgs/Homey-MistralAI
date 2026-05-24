@@ -1,0 +1,86 @@
+{
+  "title": {
+    "en": "Ask Mistral Agent (Vision)",
+    "nl": "Vraag Mistral Agent (Vision)",
+    "de": "Mistral Agent fragen (Vision)",
+    "fr": "Demander à l'agent Mistral (Vision)",
+    "it": "Chiedi all'agente Mistral (Vision)",
+    "sv": "Fråga Mistral Agent (Vision)",
+    "no": "Spør Mistral Agent (Vision)",
+    "es": "Preguntar al Agente Mistral (Vision)",
+    "da": "Spørg Mistral Agent (Vision)",
+    "ru": "Спросить Mistral Agent (Vision)",
+    "pl": "Zapytaj Mistral Agent (Vision)",
+    "ko": "Mistral Agent에게 질문하기 (비전)",
+    "ar": "اسأل وكيل Mistral (الرؤية)"
+  },
+  "titleFormatted": {
+    "en": "Ask Mistral Agent: [[prompt]] about image [[droptoken]] using Agent [[agent_id]] (Max: [[max_tokens]], ID: [[conversation_id]])"
+  },
+  "hint": {
+    "en": "Send a prompt with an image to a custom Mistral AI Agent.",
+    "fr": "Envoyez une invite avec une image à un agent Mistral AI personnalisé."
+  },
+  "droptoken": "image",
+  "args": [
+    {
+      "name": "prompt",
+      "type": "text",
+      "placeholder": {
+        "en": "Describe this image...",
+        "fr": "Décrivez cette image..."
+      }
+    },
+    {
+      "name": "agent_id",
+      "type": "text",
+      "placeholder": {
+        "en": "ag_...",
+        "fr": "ag_..."
+      }
+    },
+    {
+      "name": "max_tokens",
+      "type": "number",
+      "placeholder": {
+        "en": "800"
+      },
+      "min": 1,
+      "max": 8192
+    },
+    {
+      "name": "conversation_id",
+      "type": "text",
+      "title": {
+        "en": "Conversation ID (optional)",
+        "fr": "ID de conversation (optionnel)"
+      },
+      "placeholder": {
+        "en": "Leave empty for single-use",
+        "fr": "Laisser vide pour usage unique"
+      },
+      "required": false
+    }
+  ],
+  "tokens": [
+    {
+      "name": "response",
+      "type": "string",
+      "title": {
+        "en": "Response",
+        "nl": "Reactie",
+        "de": "Antwort",
+        "fr": "Réponse",
+        "it": "Risposta",
+        "sv": "Svar",
+        "no": "Svar",
+        "es": "Respuesta",
+        "da": "Svar",
+        "ru": "Ответ",
+        "pl": "Odpowiedź",
+        "ko": "응답",
+        "ar": "الرد"
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 const Homey = require('homey');
 const fetch = require('node-fetch');
 const { HomeyAPI } = require('homey-api');
+const { URLSearchParams } = require('url');
 
 const DEFAULT_MODELS = [
   { name: 'Mistral Large', description: 'mistral-large-latest', id: 'mistral-large-latest' },
@@ -319,6 +320,78 @@ class MistralApp extends Homey.App {
       return { response: responseText };
     });
 
+    // --- Flow Action: Ask Mistral Agent (Vision) ---
+    const askMistralAgentVisionAction = this.homey.flow.getActionCard('ask_mistral_agent_vision');
+    
+    askMistralAgentVisionAction.registerRunListener(async (args) => {
+      const { prompt, droptoken, agent_id, max_tokens, conversation_id } = args;
+
+      if (!prompt || !prompt.trim()) {
+        throw new Error('Prompt cannot be empty.');
+      }
+      if (!droptoken) {
+        throw new Error('An image must be provided.');
+      }
+      if (!agent_id || !agent_id.trim()) {
+        throw new Error('Agent ID cannot be empty.');
+      }
+
+      const parsedTokens = parseInt(max_tokens, 10);
+      const resolvedMaxTokens = Number.isFinite(parsedTokens)
+        ? Math.min(Math.max(parsedTokens, 1), 4096)
+        : 800;
+
+      const convId = conversation_id && conversation_id.trim() ? conversation_id.trim() : null;
+      const history = convId ? (this.conversations[convId] || []) : [];
+
+      const imageStream = await droptoken.getStream();
+      const chunks = [];
+      for await (const chunk of imageStream) {
+        chunks.push(chunk);
+      }
+      const imageBuffer = Buffer.concat(chunks);
+      const base64Image = imageBuffer.toString('base64');
+      const dataUrl = `data:image/jpeg;base64,${base64Image}`;
+
+      const body = {
+        agent_id: agent_id.trim(),
+        messages: [
+          ...history,
+          { 
+            role: 'user', 
+            content: [
+              { type: 'text', text: prompt.trim() },
+              { type: 'image_url', image_url: dataUrl }
+            ] 
+          }
+        ],
+        max_tokens: resolvedMaxTokens
+      };
+
+      const responseData = await this.fetchMistralAgent(body);
+      const responseText = responseData?.choices?.[0]?.message?.content?.trim();
+
+      if (!responseText) {
+        throw new Error('Mistral AI returned an empty or unexpected response.');
+      }
+
+      if (convId) {
+        if (!this.conversations[convId]) this.conversations[convId] = [];
+        this.conversations[convId].push({ role: 'user', content: prompt.trim() });
+        this.conversations[convId].push({ role: 'assistant', content: responseText });
+        if (this.conversations[convId].length > 20) {
+          this.conversations[convId] = this.conversations[convId].slice(-20);
+        }
+      }
+
+      this.log(`Mistral Agent Vision responded: ${responseText.substring(0, 80)}...`);
+
+      const respondedTrigger = this.homey.flow.getTriggerCard('mistral_agent_vision_responded');
+      await respondedTrigger.trigger({ response: responseText, prompt: prompt.trim() }).catch(this.error);
+
+      return { response: responseText };
+    });
+
     // --- Flow Action: Control Devices with Prompt ---
     const controlDevicesAction = this.homey.flow.getActionCard('control_devices_prompt');
 
@@ -417,15 +490,15 @@ class MistralApp extends Homey.App {
       let customActionsSection = '';
       if (discoveredActions.length > 0) {
         const actionLines = discoveredActions.map(a =>
-          a.description ? `  - "${a.title}": ${a.description}` : `  - "${a.title}"`
+          a.description ? `  • "${a.title}": ${a.description}` : `  • "${a.title}"`
         ).join('\n');
-        customActionsSection = `\nCUSTOM ACTIONS:\n- The following custom Homey flow actions are available:\n${actionLines}\n- To trigger one, add "customActionTriggers": ["<exact title>"] to your JSON.\n- Match user requests to action names/descriptions when relevant.`;
+        customActionsSection = `\n\n--- CUSTOM FLOW ACTIONS ---\nThe user has set up the following custom Homey flow actions. You MUST consider them when the user's request matches:\n${actionLines}\nTo trigger a custom action, include it in "customActionTriggers": [{"title":"<exact title as listed above>","aiMessage":"<confirmation in user language>"}]\nIMPORTANT: Use the EXACT title string as listed. You can trigger multiple actions at once. Always generate an aiMessage.`;
       }
 
       const systemPrompt = `You are a Homey smart home controller. You receive a device list with IDs, zones, current states and capability types, then a user command.
 Current time: ${currentTime}
 Reply ONLY with valid JSON (no markdown, no explanation outside JSON):
-{"actions":[...],"scheduledActions":[{"delayMinutes":<1-1920>,"actions":[...],"description":"<desc>"}],"customActionTriggers":["<title>"],"explanation":"<short summary in user language>"}
+{"actions":[...],"scheduledActions":[{"delayMinutes":<1-1920>,"actions":[...],"description":"<desc>"}],"customActionTriggers":[{"title":"<exact title>","aiMessage":"<short message for the user>"}],"explanation":"<short summary in user language>"}
 Rules:
 - MUST RETURN VALID JSON. Replace any newlines in your explanation with \\\\n. Do NOT use actual line breaks inside string values.
 - Prefer matching by deviceId (exact). Fall back to exact name, then partial name match.
@@ -435,6 +508,7 @@ Rules:
 - Zones help identify devices by location (e.g. "living room light" → zone "Living Room").
 - If nothing matches or no action needed, return empty actions array and explain.
 - Only include scheduledActions or customActionTriggers when needed; omit otherwise.
+- For each customActionTrigger, "aiMessage" is a short, friendly confirmation message in the user's language.
 SCHEDULING:
 - You can schedule device actions for later (max 32 hours = 1920 minutes from now).
 - If the user says "in X minutes/hours" or "at HH:MM", use scheduledActions.
@@ -442,6 +516,7 @@ SCHEDULING:
 - Scheduled and immediate actions can coexist in the same response.${customActionsSection}
 
 ${deviceContext}`;
+
 
       const convId = conversation_id && conversation_id.trim() ? conversation_id.trim() : null;
 
@@ -570,10 +645,18 @@ ${deviceContext}`;
 
       // --- Handle custom action triggers ---
       const customActionTriggers = Array.isArray(parsed.customActionTriggers) ? parsed.customActionTriggers : [];
-      for (const title of customActionTriggers) {
-        this.log(`[control_devices_prompt] Triggering custom action: "${title}"`);
-        this._customActionTriggerCard.trigger({ action_title: title }, { action_title: title })
-          .catch(err => this.error('[control_devices_prompt] Custom action trigger failed:', err.message));
+      for (const item of customActionTriggers) {
+        // Support both legacy string format and new object format { title, aiMessage }
+        const title = typeof item === 'string' ? item : (item && item.title ? item.title : null);
+        const aiMessage = typeof item === 'object' && item !== null && item.aiMessage
+          ? String(item.aiMessage).trim()
+          : '';
+        if (!title) continue;
+        this.log(`[control_devices_prompt] Triggering custom action: "${title}" (aiMessage: ${aiMessage || '(none)'})`);
+        this._customActionTriggerCard.trigger(
+          { action_title: title, ai_message: aiMessage },
+          { action_title: title }
+        ).catch(err => this.error('[control_devices_prompt] Custom action trigger failed:', err.message));
       }
 
       return {
@@ -594,6 +677,35 @@ ${deviceContext}`;
       }
     });
 
+    // --- Flow Action: Add to Conversation ---
+    const addToConversationAction = this.homey.flow.getActionCard('add_to_conversation');
+    addToConversationAction.registerRunListener(async (args) => {
+      const convId = args.conversation_id && args.conversation_id.trim() ? args.conversation_id.trim() : null;
+      const role = args.role || 'user';
+      const message = args.message && args.message.trim() ? args.message.trim() : '';
+
+      if (!convId) {
+        throw new Error('Conversation ID is required.');
+      }
+      if (!message) {
+        throw new Error('Message cannot be empty.');
+      }
+
+      if (!this.conversations[convId]) {
+        this.conversations[convId] = [];
+      }
+
+      this.conversations[convId].push({ role, content: message });
+
+      // Keep only the last 20 messages in conversation history (matching existing behavior)
+      if (this.conversations[convId].length > 20) {
+        this.conversations[convId] = this.conversations[convId].slice(-20);
+      }
+
+      this.log(`[add_to_conversation] Added message as ${role} to conversation "${convId}"`);
+      return true;
+    });
+
     // --- Flow Trigger: Custom Action Triggered ---
     // action_title is now type:text — no autocomplete listener needed.
     this._customActionTriggerCard = this.homey.flow.getTriggerCard('custom_action_triggered');
@@ -602,32 +714,58 @@ ${deviceContext}`;
         args.action_title.trim().toLowerCase() === state.action_title.trim().toLowerCase();
     });
 
+
     this.log('Flow cards registered');
   }
 
   // ---------------------------------------------------------------------------
-  // Custom Action Discovery (Option B: read from flows via getArgumentValues)
+  // Custom Action Discovery (reads from flows via getArgumentValues)
   // ---------------------------------------------------------------------------
   async _discoverCustomActionTitles() {
     try {
-      if (this._customActionTriggerCard && typeof this._customActionTriggerCard.getArgumentValues === 'function') {
-        const argValues = await this._customActionTriggerCard.getArgumentValues();
-        // Collect {title, description} pairs; deduplicate by title
-        const seen = new Set();
-        const actions = [];
-        for (const v of argValues) {
-          const title = (v && v.action_title && v.action_title.trim()) || '';
-          if (!title || seen.has(title.toLowerCase())) continue;
-          seen.add(title.toLowerCase());
-          const desc = (v && v.description && v.description.trim()) || '';
-          actions.push({ title, description: desc });
-        }
-        this._discoveredActionTitles = actions.map(a => a.title);
-        this._discoveredActions = actions; // full objects with description
-        this.log('[custom_actions] Discovered actions:', actions);
+      if (!this._customActionTriggerCard || typeof this._customActionTriggerCard.getArgumentValues !== 'function') {
+        this.log('[custom_actions] getArgumentValues not available on trigger card.');
+        return;
       }
+
+      const argValues = await this._customActionTriggerCard.getArgumentValues();
+
+      // Log raw result for diagnostics
+      this.log(`[custom_actions] getArgumentValues returned ${argValues ? argValues.length : 'null'} entries:`, JSON.stringify(argValues));
+
+      if (!argValues || argValues.length === 0) {
+        // Keep previous cache so the AI doesn't lose known actions on a transient empty result
+        if (this._discoveredActions && this._discoveredActions.length > 0) {
+          this.log('[custom_actions] Discovery returned empty — keeping previous cache:', JSON.stringify(this._discoveredActions));
+        } else {
+          this._discoveredActions = [];
+          this._discoveredActionTitles = [];
+          this.log('[custom_actions] No custom actions found in flows.');
+        }
+        return;
+      }
+
+      // Collect {title, description} pairs; deduplicate by title
+      const seen = new Set();
+      const actions = [];
+      for (const v of argValues) {
+        const title = (v && v.action_title && v.action_title.trim()) || '';
+        if (!title || seen.has(title.toLowerCase())) continue;
+        seen.add(title.toLowerCase());
+        const desc = (v && v.description && v.description.trim()) || '';
+        actions.push({ title, description: desc });
+      }
+
+      this._discoveredActionTitles = actions.map(a => a.title);
+      this._discoveredActions = actions;
+      this.log(`[custom_actions] Discovered ${actions.length} action(s):`, JSON.stringify(actions));
+
     } catch (err) {
-      this.log('[custom_actions] Could not discover action titles:', err.message);
+      this.error('[custom_actions] Could not discover action titles:', err.message);
+      // Keep previous cache on error
+      if (this._discoveredActions && this._discoveredActions.length > 0) {
+        this.log('[custom_actions] Keeping cached actions after error.');
+      }
     }
   }
 
@@ -741,6 +879,7 @@ ${deviceContext}`;
     this._persistTasks();
     this.log(`[scheduler] Cancelled task ${taskId}`);
   }
+
 
   async fetchMistral(body) {
     const apiKey = this.homey.settings.get('api_key');

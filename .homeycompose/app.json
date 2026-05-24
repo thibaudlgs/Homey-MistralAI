@@ -64,6 +64,11 @@
       "method": "DELETE",
       "path": "/tasks/:id",
       "public": true
+    },
+    "getCustomActions": {
+      "method": "GET",
+      "path": "/custom-actions",
+      "public": true
     }
   },
   "images": {

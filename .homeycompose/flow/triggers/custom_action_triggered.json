@@ -30,6 +30,7 @@
     "ar": "يتم تشغيل الإجراء المخصص \"[[action_title]]\" (الوصف: [[description]])"
   },
 
+
   "hint": {
     "en": "Triggers when the AI recognises this action by its title in the 'Control devices with prompt' card. Give a short, clear title (e.g. 'Movie mode', 'Night alarm'). The optional description helps the AI understand when to use it.",
     "fr": "Se déclenche lorsque l'IA reconnaît cette action par son titre dans la carte 'Contrôler des appareils avec un prompt'. Donnez un titre court et clair (ex: 'Mode cinéma', 'Alarme nuit'). La description optionnelle aide l'IA à comprendre quand l'utiliser."
@@ -125,6 +126,26 @@
         "ar": "عنوان الإجراء"
       },
       "example": "Movie mode"
+    },
+    {
+      "name": "ai_message",
+      "type": "string",
+      "title": {
+        "en": "AI message",
+        "fr": "Message de l'IA",
+        "nl": "AI-bericht",
+        "de": "KI-Nachricht",
+        "it": "Messaggio AI",
+        "sv": "AI-meddelande",
+        "no": "AI-melding",
+        "es": "Mensaje de la IA",
+        "da": "AI-besked",
+        "ru": "Сообщение ИИ",
+        "pl": "Wiadomość AI",
+        "ko": "AI 메시지",
+        "ar": "رسالة الذكاء الاصطناعي"
+      },
+      "example": "Activating movie mode: dimming lights and turning on the TV."
     }
   ]
 }
